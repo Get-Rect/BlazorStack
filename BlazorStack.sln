@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorStack.API", "BlazorStack.API\BlazorStack.API.csproj", "{393875D1-673D-451C-B650-E816C4F21AA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorStack.API", "BlazorStack.API\BlazorStack.API.csproj", "{393875D1-673D-451C-B650-E816C4F21AA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorStack.Data", "BlazorStack.Data\BlazorStack.Data.csproj", "{7D9D08CE-5211-4D41-871C-5CC703249C0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorStack.Data", "BlazorStack.Data\BlazorStack.Data.csproj", "{7D9D08CE-5211-4D41-871C-5CC703249C0B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorStack.Portal", "BlazorStack.Portal\BlazorStack.Portal.csproj", "{F4E8CC40-A0D4-4A51-A79D-1D7B2ADFCB34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorStack.Services", "BlazorStack.Services\BlazorStack.Services.csproj", "{E3C34EA5-8623-4512-AF9C-9B911B20E01F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{7D9D08CE-5211-4D41-871C-5CC703249C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D9D08CE-5211-4D41-871C-5CC703249C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D9D08CE-5211-4D41-871C-5CC703249C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4E8CC40-A0D4-4A51-A79D-1D7B2ADFCB34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4E8CC40-A0D4-4A51-A79D-1D7B2ADFCB34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4E8CC40-A0D4-4A51-A79D-1D7B2ADFCB34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4E8CC40-A0D4-4A51-A79D-1D7B2ADFCB34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3C34EA5-8623-4512-AF9C-9B911B20E01F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3C34EA5-8623-4512-AF9C-9B911B20E01F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3C34EA5-8623-4512-AF9C-9B911B20E01F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3C34EA5-8623-4512-AF9C-9B911B20E01F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,11 +3,11 @@
 
 <AuthorizeView>
     <Authorized>
-        Logged in as @context.User.Identity?.Name. <a href="logout"><span class="bi bi-door-closed-fill" aria-hidden="true" style="vertical-align:middle"></span> Logout</a>
+        Logged in as @context.User.Identity?.Name. <a href="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
     </Authorized>
     <NotAuthorized>
-        <a href="login"><span class="bi bi-door-open" aria-hidden="true" style="vertical-align:middle"></span> Login</a>
-        <a href="register"><span class="bi bi-pencil-square" aria-hidden="true" style="vertical-align:middle"></span> Register</a>
+        <a href="login"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+        <a href="register"><i class="fa-solid fa-pen-to-square"></i> Register</a>
     </NotAuthorized>
 </AuthorizeView>
 

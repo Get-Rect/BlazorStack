@@ -1,7 +1,9 @@
 ﻿@page "/login"
 @using BlazorStack.Services
+@using Blazored.LocalStorage
 @using Microsoft.AspNetCore.Components.Authorization
 @inject ApplicationAPIService _api;
+@inject ILocalStorageService _localStorage;
 
 <PageTitle>Login</PageTitle>
 
@@ -66,6 +68,7 @@
             return;
         }
 
-        await _api.Login(email, password);
+        var loginResponse = await _api.Login(email, password);
+        await _localStorage.SetItemAsStringAsync("token", loginResponse?.AccessToken ?? string.Empty);
     }
 }

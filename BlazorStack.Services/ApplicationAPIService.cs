@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlazorStack.Services.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -17,7 +18,7 @@ namespace BlazorStack.Services
             _http = http;
         }
 
-        public async Task Login(string email, string password)
+        public async Task<LoginResponse?> Login(string email, string password)
         {
             var result = await _http.PostAsJsonAsync(
                 "login?useCookies=false", new
@@ -25,7 +26,14 @@ namespace BlazorStack.Services
                     email,
                     password
                 });
-            var test = result.Content.ReadAsStringAsync();
+            var response = await result.Content.ReadFromJsonAsync<LoginResponse>();
+            return response;
+        }
+
+        public async Task<UserInfo?> GetUserInfo()
+        {
+            var result = await _http.GetAsync("manage/info");
+            return await result.Content.ReadFromJsonAsync<UserInfo>();
         }
     }
 }

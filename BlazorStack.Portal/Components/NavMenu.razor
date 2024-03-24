@@ -1,0 +1,31 @@
+﻿@if (isNavMenuCollapsed)
+{
+    <div class="nav-menu">
+        <!-- Navigation links or items -->
+        <NavLink href="" Match="NavLinkMatch.All">Home <i class="fa-solid fa-house"></i></NavLink>
+        <!-- Add more links as needed -->
+    </div>
+}
+else
+{
+    <div class="nav-menu">
+        <!-- Navigation links or items -->
+        <NavLink href="" Match="NavLinkMatch.All"><i class="fa-solid fa-house"></i></NavLink>
+        <!-- Add more links as needed -->
+    </div>
+}
+<button @onclick="ToggleNavMenu"><i class="fa-solid fa-arrow-@(isNavMenuCollapsed ? "left" : "right")"></i></button>
+
+@code {
+    [Parameter]
+    public EventCallback OnCollapseMenu { get; set; }
+
+    private bool isNavMenuCollapsed = true;
+
+
+    private async Task ToggleNavMenu()
+    {
+        isNavMenuCollapsed = !isNavMenuCollapsed;
+        await OnCollapseMenu.InvokeAsync();
+    }
+}

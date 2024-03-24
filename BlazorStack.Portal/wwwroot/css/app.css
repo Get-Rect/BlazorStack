@@ -1,3 +1,71 @@
+:root {
+    --primary: #0acdff;
+    --secondary: #0b3954;
+    --red: #ff6663;
+    --green: #e0ff4f;
+    --background: #F5F8F2;
+}
+
+#app {
+    min-height: 100vh;
+}
+
+body {
+    background-color: var(--background);
+    margin: 0 !important;
+}
+
+
+.sidebar {
+    background-color: var(--secondary);
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    overflow: auto;
+    transition: width 0.5s;
+}
+
+    /* Collapsed sidebar styling */
+    .sidebar.collapsed {
+        width: 2rem;
+        overflow: hidden;
+    }
+
+/* Main content area styling */
+.main {
+    margin-left: 250px;
+    padding: 10px;
+    transition: margin-left 0.5s;
+}
+
+    .main.shifted {
+        margin-left: 2rem;
+    }
+
+.header {
+    background-color: var(--secondary);
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card {
+    background-color: white;
+    margin: 10px 0;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+.content {
+    padding: 20px;
+    background-color: #f4f4f4;
+    height: calc(100% - 40px);
+    overflow-y: auto;
+}
+
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }

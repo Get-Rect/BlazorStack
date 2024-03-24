@@ -32,8 +32,16 @@ namespace BlazorStack.Services
 
         public async Task<UserInfo?> GetUserInfo()
         {
-            var result = await _http.GetAsync("manage/info");
-            return await result.Content.ReadFromJsonAsync<UserInfo>();
+            try
+            {
+                var result = await _http.GetAsync("manage/info");
+                return await result.Content.ReadFromJsonAsync<UserInfo>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            
         }
     }
 }

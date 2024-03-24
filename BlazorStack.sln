@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorStack.Data", "BlazorS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorStack.Portal", "BlazorStack.Portal\BlazorStack.Portal.csproj", "{F4E8CC40-A0D4-4A51-A79D-1D7B2ADFCB34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorStack.Services", "BlazorStack.Services\BlazorStack.Services.csproj", "{E3C34EA5-8623-4512-AF9C-9B911B20E01F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorStack.Services", "BlazorStack.Services\BlazorStack.Services.csproj", "{E3C34EA5-8623-4512-AF9C-9B911B20E01F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

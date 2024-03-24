@@ -6,6 +6,10 @@
     --background: #F5F8F2;
 }
 
+.primary {
+    color: var(--primary);
+}
+
 #app {
     min-height: 100vh;
 }
@@ -44,7 +48,6 @@ body {
 
 .header {
     background-color: var(--secondary);
-    color: white;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;

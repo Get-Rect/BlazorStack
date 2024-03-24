@@ -41,7 +41,32 @@ namespace BlazorStack.Services
             {
                 return null;
             }
-            
+        }
+
+        public async Task<List<UserViewModel>?> GetUsers(string search = "")
+        {
+            try
+            {
+                var result = await _http.GetAsync("users");
+                return await result.Content.ReadFromJsonAsync<List<UserViewModel>>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<UserDetailsViewModel?> GetUser(string id)
+        {
+            try
+            {
+                var result = await _http.GetAsync($"users/{id}");
+                return await result.Content.ReadFromJsonAsync<UserDetailsViewModel>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

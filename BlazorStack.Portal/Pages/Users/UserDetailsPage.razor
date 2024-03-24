@@ -1,0 +1,46 @@
+﻿@page "/users/{Id}"
+@using BlazorStack.Services
+@using BlazorStack.Services.Models
+
+@inject ApplicationAPIService _api;
+
+@if (userDetails == null)
+{
+    <p>Loading user details...</p>
+}
+else
+{
+    <div class="user-details-card">
+        <div class="user-photo" @onclick="AdminUploadPhoto">
+            <img src="@(!string.IsNullOrEmpty(userDetails.PhotoUrl) ? @userDetails.PhotoUrl : "/img/defaultUserPhoto.png")" alt="User Photo" />
+        </div>
+        <div class="user-info">
+            <h2>@userDetails.FirstName @userDetails.LastName</h2>
+            <p>Email: @userDetails.Email</p>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; } = string.Empty;
+
+    private readonly string DefaultPhotoUrl = "Some file in wwwroot.";
+
+    private UserDetailsViewModel? userDetails;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userDetails = await _api.GetUser(Id);
+    }
+
+    private void AdminUploadPhoto()
+    {
+
+    }
+
+    private void EditUserInfo()
+    {
+
+    }
+}

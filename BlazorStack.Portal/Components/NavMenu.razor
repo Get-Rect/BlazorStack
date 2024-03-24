@@ -1,26 +1,15 @@
-﻿@if (isNavMenuCollapsed)
-{
-    <div class="nav-menu primary">
-        <!-- Navigation links or items -->
-        <NavLink class="primary" href="" Match="NavLinkMatch.All">Home <i class="fa-solid fa-house"></i></NavLink>
-        <!-- Add more links as needed -->
-    </div>
-}
-else
-{
-    <div class="nav-menu primary">
-        <!-- Navigation links or items -->
-        <NavLink class="primary" href="" Match="NavLinkMatch.All"><i class="fa-solid fa-house"></i></NavLink>
-        <!-- Add more links as needed -->
-    </div>
-}
+﻿<div class="nav-menu primary">
+    <NavLink class="primary" href="" Match="NavLinkMatch.All">@(isNavMenuCollapsed ? "" : "Home ")<i class="fa-solid fa-house"></i></NavLink>
+    <NavLink class="primary" href="/users" Match="NavLinkMatch.All">@(isNavMenuCollapsed ? "" : "Users ")<i class="fa-solid fa-users"></i></NavLink>
+</div>
+
 <button @onclick="ToggleNavMenu"><i class="fa-solid fa-arrow-@(isNavMenuCollapsed ? "left" : "right")"></i></button>
 
 @code {
     [Parameter]
     public EventCallback OnCollapseMenu { get; set; }
 
-    private bool isNavMenuCollapsed = true;
+    private bool isNavMenuCollapsed = false;
 
 
     private async Task ToggleNavMenu()

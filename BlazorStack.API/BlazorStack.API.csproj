@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlazorStack.Data\BlazorStack.Data.csproj" />
+    <ProjectReference Include="..\BlazorStack.Services\BlazorStack.Services.csproj" />
   </ItemGroup>
 
 </Project>

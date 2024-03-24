@@ -10,6 +10,90 @@
     color: var(--primary);
 }
 
+.primary-background {
+    background-color: var(--primary);
+    color: var(--background);
+}
+
+.filter-row {
+    margin-bottom: 20px;
+}
+
+.user-card {
+    border: 2px solid var(--primary);
+    border-radius: 2rem;
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-info div {
+    margin-bottom: 5px;
+}
+
+.user-actions button {
+    margin-left: 10px;
+}
+
+.user-details-card {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.user-photo img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    cursor: pointer;
+    object-fit: cover;
+}
+
+.user-photo:hover {
+    opacity: 0.8;
+}
+
+.user-info {
+    margin-left: 20px;
+}
+
+    .user-info h2 {
+        margin: 0;
+    }
+
+    .user-info p {
+        margin: 5px 0;
+    }
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    border-radius: 5px;
+}
+
+    button:hover {
+        background-color: white;
+        color: black;
+        border: 1px solid #4CAF50;
+    }
+
+
+
 #app {
     min-height: 100vh;
 }
@@ -33,6 +117,13 @@ body {
     .sidebar.collapsed {
         width: 2rem;
         overflow: hidden;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        font-size: 24px;
     }
 
 /* Main content area styling */

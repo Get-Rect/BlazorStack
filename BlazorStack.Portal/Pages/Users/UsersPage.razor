@@ -1,0 +1,59 @@
+﻿@page "/users"
+@using BlazorStack.Services
+@using BlazorStack.Services.Models
+@inject ApplicationAPIService _api
+@inject NavigationManager _nav;
+
+<h3>Users</h3>
+
+<div class="filter-row">
+    <!-- Add filter elements here -->
+    <input type="text" placeholder="Search users..." @oninput="OnSearchChanged" />
+</div>
+
+<div class="users-list">
+    @if(FilteredUsers is not null)
+    {
+        @foreach (var user in FilteredUsers)
+        {
+            <div class="user-card">
+                <div class="user-info">
+                    @* <div>First Name: @user.FirstName</div>
+                    <div>Last Name: @user.LastName</div> *@
+                    <div>Email: @user.Email</div>
+                </div>
+                <div class="user-actions">
+                    <i @onclick="() => ViewUser(user)" class="fa-solid fa-eye"></i>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    private List<UserViewModel>? Users = new List<UserViewModel>(); // Populate this list with your users
+    private List<UserViewModel>? FilteredUsers => Users?.Where(u => u.FirstName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                                                         u.LastName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                                                         u.Email.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+
+    private string SearchQuery = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Users = await _api.GetUsers();
+    }
+
+    private void OnSearchChanged(ChangeEventArgs e)
+    {
+        if (e is null || e.Value is null) return;
+
+        SearchQuery = e?.Value?.ToString() ?? string.Empty;
+        StateHasChanged();
+    }
+
+    private void ViewUser(UserViewModel user)
+    {
+        _nav.NavigateTo($"/users/{user.Id}");
+    }
+
+}

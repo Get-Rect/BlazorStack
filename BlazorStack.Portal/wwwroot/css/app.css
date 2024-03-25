@@ -203,6 +203,7 @@ body {
         justify-content: center;
         gap: 1rem;
         padding: 1rem;
+        color: var(--primary);
     }
 
         .nav-menu .page-link:hover {
@@ -242,7 +243,6 @@ body {
 
 .content {
     padding: 20px;
-    background-color: #f4f4f4;
     height: calc(100% - 40px);
     overflow-y: auto;
 }

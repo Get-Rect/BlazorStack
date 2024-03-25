@@ -1,6 +1,12 @@
-﻿<div class="nav-menu primary">
-    <NavLink class="primary" href="" Match="NavLinkMatch.All">@(isNavMenuCollapsed ? "" : "Home ")<i class="fa-solid fa-house"></i></NavLink>
-    <NavLink class="primary" href="/users" Match="NavLinkMatch.All">@(isNavMenuCollapsed ? "" : "Users ")<i class="fa-solid fa-users"></i></NavLink>
+﻿@inject NavigationManager _nav;
+
+<div class="nav-menu">
+    <div class="page-link" @onclick="@(() => _nav.NavigateTo("/"))">
+        @(isNavMenuCollapsed ? "" : "Home ")<i class="fa-solid fa-house"></i>
+    </div>
+    <div class="page-link" @onclick="@(() => _nav.NavigateTo("/users"))">
+        @(isNavMenuCollapsed ? "" : "Users ")<i class="fa-solid fa-users"></i>
+    </div>
 </div>
 
 <button @onclick="ToggleNavMenu"><i class="fa-solid fa-arrow-@(isNavMenuCollapsed ? "right" : "left")"></i></button>

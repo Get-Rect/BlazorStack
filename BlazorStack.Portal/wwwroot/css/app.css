@@ -4,6 +4,15 @@
     --red: #ff6663;
     --green: #e0ff4f;
     --background: #F5F8F2;
+    --shadow: #E2E2E2;
+}
+
+.logo {
+    height: 100%;
+}
+
+.logo img {
+    height: 100%;
 }
 
 .primary {
@@ -18,6 +27,54 @@
 .filter-row {
     margin-bottom: 20px;
 }
+
+.profile-component {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.profile-component img {
+    width: 50px; /* Adjust based on your needs */
+    height: 50px;
+    border-radius: 50%;
+}
+
+.context-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility 0.3s, opacity 0.3s linear;
+}
+
+    .context-menu.visible {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .context-menu ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+        .context-menu ul li {
+            padding: 8px 12px;
+        }
+
+            .context-menu ul li a {
+                text-decoration: none;
+                color: black;
+                display: block;
+            }
+
+                .context-menu ul li a:hover {
+                    background-color: #f1f1f1;
+                }
 
 .user-card {
     border: 2px solid var(--primary);
@@ -105,12 +162,18 @@ body {
 
 
 .sidebar {
-    background-color: var(--secondary);
+    background-color: white;
     width: 250px;
     height: 100%;
     position: fixed;
     overflow: auto;
     transition: width 0.5s;
+    box-shadow: 0px 10px 10px 1px var(--shadow);
+    padding-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
 }
 
     /* Collapsed sidebar styling */
@@ -138,11 +201,15 @@ body {
     }
 
 .header {
-    background-color: var(--secondary);
+    background-color: white;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0px 0px 10px 1px var(--shadow);
+    height: 5rem;
+    position: relative;
+    z-index: 10;
 }
 
 .card {

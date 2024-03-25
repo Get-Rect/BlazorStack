@@ -1,14 +1,27 @@
-﻿@using Microsoft.AspNetCore.Components.Authorization
+﻿@using BlazorStack.Portal.Constants
+@using BlazorStack.Portal.Extensions
+@using Microsoft.AspNetCore.Components.Authorization
 @inherits LayoutComponentBase
 
 <div class="header primary">
+    <div class="logo">
+        <img src="/img/B-Sharp-Logo.jpg" alt="B# Logo" />
+    </div>
+
     <AuthorizeView>
         <Authorized>
-            Logged in as @context.User.Identity?.Name. <a class="primary" href="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            <div class="profile-component" @onclick="ToggleMenu" @onmouseleave="() => isMenuVisible = false">
+                <img src="@context.User.GetPhotoUrl() ?? " alt="Profile" />
+                <div class="@($"context-menu {MenuVisibilityClass}")">
+                    <ul>
+                        <li><a href="/account-settings">Account Settings</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
         </Authorized>
         <NotAuthorized>
-            <a href="login"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
-            <a href="register"><i class="fa-solid fa-user-pen"></i> Register</a>
+            <NavLink href="login"><i class="fa-solid fa-right-to-bracket"></i> Login</NavLink>
         </NotAuthorized>
     </AuthorizeView>
 </div>
@@ -26,6 +39,15 @@
 @code {
     private bool SideBarIsCollapsed;
     private string SideBarCssClass = "sidebar";
+
+    private bool isMenuVisible = false;
+
+    private void ToggleMenu()
+    {
+        isMenuVisible = !isMenuVisible;
+    }
+
+    private string MenuVisibilityClass => isMenuVisible ? "visible" : "hidden";
 
     private void CollapseMenu()
     {

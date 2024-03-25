@@ -3,7 +3,7 @@
     <NavLink class="primary" href="/users" Match="NavLinkMatch.All">@(isNavMenuCollapsed ? "" : "Users ")<i class="fa-solid fa-users"></i></NavLink>
 </div>
 
-<button @onclick="ToggleNavMenu"><i class="fa-solid fa-arrow-@(isNavMenuCollapsed ? "left" : "right")"></i></button>
+<button @onclick="ToggleNavMenu"><i class="fa-solid fa-arrow-@(isNavMenuCollapsed ? "right" : "left")"></i></button>
 
 @code {
     [Parameter]

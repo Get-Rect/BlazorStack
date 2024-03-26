@@ -1,33 +1,38 @@
-﻿@page "/users"
-@using BlazorStack.Services
+﻿@using BlazorStack.Services
 @using BlazorStack.Services.Models
+@using Microsoft.AspNetCore.Authorization
+
+@page "/users"
 @inject ApplicationAPIService _api
 @inject NavigationManager _nav;
+@attribute [Authorize]
 
-<h3>Users</h3>
+<div class="scrollable-card">
+    <h3>Users</h3>
 
-<div class="filter-row">
-    <!-- Add filter elements here -->
-    <input type="text" placeholder="Search users..." @oninput="OnSearchChanged" />
-</div>
+    <div class="filter-row">
+        <!-- Add filter elements here -->
+        <input type="text" placeholder="Search users..." @oninput="OnSearchChanged" />
+    </div>
 
-<div class="users-list">
-    @if(FilteredUsers is not null)
-    {
-        @foreach (var user in FilteredUsers)
+    <div class="users-list">
+        @if (FilteredUsers is not null)
         {
-            <div class="user-card">
-                <div class="user-info">
-                    @* <div>First Name: @user.FirstName</div>
-                    <div>Last Name: @user.LastName</div> *@
-                    <div>Email: @user.Email</div>
+            @foreach (var user in FilteredUsers)
+            {
+                <div class="user-card">
+                    <div class="user-info">
+                        @* <div>First Name: @user.FirstName</div>
+                <div>Last Name: @user.LastName</div> *@
+                        <div>Email: @user.Email</div>
+                    </div>
+                    <div class="user-actions">
+                        <i @onclick="() => ViewUser(user)" class="fa-solid fa-eye"></i>
+                    </div>
                 </div>
-                <div class="user-actions">
-                    <i @onclick="() => ViewUser(user)" class="fa-solid fa-eye"></i>
-                </div>
-            </div>
+            }
         }
-    }
+    </div>
 </div>
 
 @code {

@@ -30,6 +30,12 @@ namespace BlazorStack.Services
             return response;
         }
 
+        //public async Task<bool> Logout()
+        //{
+        //    var result = await _http.PostAsJsonAsync("account/logout", new { });
+        //    return result.IsSuccessStatusCode;
+        //}
+
         public async Task<UserInfo?> GetUserInfo()
         {
             try

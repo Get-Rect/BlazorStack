@@ -2,6 +2,7 @@
 @using BlazorStack.Portal.Extensions
 @using Microsoft.AspNetCore.Components.Authorization
 @inherits LayoutComponentBase
+@inject NavigationManager _nav
 
 <div class="header primary">
     <div class="logo">
@@ -15,7 +16,7 @@
                 <div class="@($"context-menu {MenuVisibilityClass}")">
                     <ul>
                         <li><a href="/account-settings">Account Settings</a></li>
-                        <li><a href="/logout">Logout</a></li>
+                        <li><a href="@($"/logout?returnUrl={_nav.Uri}")">Logout</a></li>
                     </ul>
                 </div>
             </div>

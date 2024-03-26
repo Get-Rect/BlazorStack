@@ -1,0 +1,23 @@
+﻿@using BlazorStack.Portal.Auth
+@using BlazorStack.Services
+@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+
+@page "/logout"
+@inject ApplicationAPIService _api;
+@inject NavigationManager _nav;
+@inject ILocalStorageService _localStorage
+@inject AuthenticationStateProvider _authState;
+@attribute [Authorize]
+
+@code {
+    [SupplyParameterFromQuery(Name = "returnUrl")]
+    public string? returnUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await _localStorage.RemoveItemAsync("token");
+        _nav.NavigateTo("/", forceLoad: true);
+    }
+}

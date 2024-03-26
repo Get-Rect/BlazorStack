@@ -249,6 +249,10 @@ body {
             background-color: #f1f1f1;
         }
 
+.pointer {
+    cursor: pointer;
+}
+
 /* Main content area styling */
 .main {
     margin-left: 250px;

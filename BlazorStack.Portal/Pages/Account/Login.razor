@@ -1,45 +1,36 @@
-﻿@page "/login"
-@using BlazorStack.Services
+﻿@using BlazorStack.Services
 @using Blazored.LocalStorage
 @using Microsoft.AspNetCore.Components.Authorization
+
+@page "/login"
+@layout LoginLayout
 @inject ApplicationAPIService _api;
 @inject ILocalStorageService _localStorage;
+@inject NavigationManager _nav;
 
-<PageTitle>Login</PageTitle>
 
-<h1>Login</h1>
-
-@* <AuthorizeView>
-    <Authorized>
-        <div class="alert alert-success">You're logged in as @context.User.Identity?.Name.</div>
-    </Authorized>
-    <NotAuthorized> *@
-        @if (errors)
+<div class="login-card">
+    <PageTitle>Login</PageTitle>
+    @if (errors)
+    {
+        @foreach (var error in errorList)
         {
-            @foreach (var error in errorList)
-            {
-                <div class="alert alert-danger">@error</div>
-            }
+            <div class="alert alert-danger">@error</div>
         }
-        <div class="flex-outer">
-            <div>
-                <label for="email">
-                    Email:
-                </label>
-                <input required id="email" name="emailInput" placeholder="Enter your email address" type="email" @bind-value="email" />
-            </div>
-            <div>
-                <label for="password">
-                    Password:
-                </label>
-                <input required id="password" name="passwordInput" placeholder="Enter your password" type="password" @bind-value="password" />
-            </div>
-            <div>
-                <button class="btn btn-primary" @onclick="DoLoginAsync">Login</button>
-            </div>
+    }
+
+    <div class="flex-outer">
+        <div class="form-group">
+            <input class="form-field" required id="email" name="emailInput" placeholder="Email" type="email" @bind-value="email" />
         </div>
-@*     </NotAuthorized>
-</AuthorizeView> *@
+        <div class="form-group">
+            <input class="form-field" required id="password" name="passwordInput" placeholder="Password" type="password" @bind-value="password" />
+        </div>
+        <div>
+            <button class="btn btn-primary" @onclick="DoLoginAsync">Login</button>
+        </div>
+    </div>
+</div>
 
 @code {
     private bool success, errors;
@@ -70,5 +61,6 @@
 
         var loginResponse = await _api.Login(email, password);
         await _localStorage.SetItemAsStringAsync("token", loginResponse?.AccessToken ?? string.Empty);
+        _nav.NavigateTo("/");
     }
 }

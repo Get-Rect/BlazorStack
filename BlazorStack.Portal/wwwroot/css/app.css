@@ -7,6 +7,44 @@
     --shadow: #E2E2E2;
 }
 
+.login-card {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Adjust based on your preference */
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-field {
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+.scrollable-card {
+    overflow-y: auto;
+    max-height: 90vh; /* Adjust the height as necessary */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow effect */
+    margin: 20px; /* Spacing around the card */
+    padding: 20px; /* Padding inside the card */
+    background-color: white; /* Background color of the card */
+    border-radius: 2rem;
+}
+
+/* You might want to add additional media queries for responsiveness */
+@media (max-width: 600px) {
+    .scrollable-card {
+        margin: 10px;
+        padding: 10px;
+    }
+}
+
 .logo {
     height: 100%;
 }

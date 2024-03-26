@@ -1,7 +1,12 @@
-﻿@page "/"
+﻿@using Microsoft.AspNetCore.Authorization
+@page "/"
+@attribute [Authorize]
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="scrollable-card">
+    <h1>Welcome to B#</h1>
 
-Welcome to your new app.
+    This application is an example of how simple and performant Blazor web assembly applications can be using ASP.NET Identity for security and no custom Javascript.
+</div>
+

@@ -1,3 +1,4 @@
+using BlazorStack.Data;
 using BlazorStack.Data.Contexts;
 using BlazorStack.Data.Models;
 using Microsoft.AspNetCore.Identity;
@@ -34,6 +35,13 @@ builder.Services.AddCors(
             .AllowCredentials()));
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    await Seeder.Seed(services);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

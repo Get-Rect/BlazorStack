@@ -49,6 +49,19 @@ namespace BlazorStack.Services
             }
         }
 
+        public async Task<List<RoleClaim>?> GetRoles()
+        {
+            try
+            {
+                var result = await _http.GetAsync("account/roles");
+                return await result.Content.ReadFromJsonAsync<List<RoleClaim>>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public async Task<List<UserViewModel>?> GetUsers(string search = "")
         {
             try

@@ -1,6 +1,9 @@
 ﻿using BlazorStack.Services;
+using BlazorStack.Services.Models;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.Net.Http;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace BlazorStack.Portal.Auth
 {
@@ -27,6 +30,19 @@ namespace BlazorStack.Portal.Auth
             claims.AddRange(
                 userInfo.Claims.Where(c => c.Key != ClaimTypes.Name && c.Key != ClaimTypes.Email)
                     .Select(c => new Claim(c.Key, c.Value)));
+
+            var roles = await _api.GetRoles();
+
+            if (roles?.Count > 0)
+            {
+                foreach (var role in roles)
+                {
+                    if (!string.IsNullOrEmpty(role.Type) && !string.IsNullOrEmpty(role.Value))
+                    {
+                        claims.Add(new Claim(role.Type, role.Value, role.ValueType, role.Issuer, role.OriginalIssuer));
+                    }
+                }
+            }
             var id = new ClaimsIdentity(claims, nameof(TokenAuthenticationStateProvider));
             return new AuthenticationState(new ClaimsPrincipal(id));
         }

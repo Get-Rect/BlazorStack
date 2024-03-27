@@ -1,8 +1,10 @@
 ﻿@using BlazorStack.Services
 @using BlazorStack.Services.Models
+@using Microsoft.AspNetCore.Authorization
 
 @page "/users/{Id}"
 @inject ApplicationAPIService _api;
+@attribute [Authorize]
 
 <div class="scrollable-card">
     @if (userDetails == null)

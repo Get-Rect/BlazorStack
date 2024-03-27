@@ -26,7 +26,13 @@ namespace BlazorStack.API.Controllers
         public async Task<List<UserViewModel>> GetUsers(string search = "")
         {
             var users = _db.Users.AsQueryable();
+            var userRoles = _db.UserRoles.ToList();
+            var roles = _db.Roles.ToList();
             var userViewModels = await users.OrderByDescending(x => x.Email).Select(x => ToUserViewModel(x)).ToListAsync();
+            foreach(var user in userViewModels)
+            {
+                user.Role = roles.FirstOrDefault(x => x.Id == userRoles.FirstOrDefault(y => y.UserId == user.Id)?.RoleId)?.Name ?? string.Empty;
+            }
             return userViewModels;
         }
 
@@ -51,7 +57,6 @@ namespace BlazorStack.API.Controllers
                 Id = user.Id,
                 Email = user.Email ?? string.Empty,
                 PhotoUrl = user.PhotoUrl ?? string.Empty,
-                Role = user.Roles?.FirstOrDefault()?.Name ?? string.Empty,
             };
         }
     }

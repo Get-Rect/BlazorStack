@@ -49,7 +49,9 @@ namespace BlazorStack.API.Controllers
             return new UserViewModel()
             {
                 Id = user.Id,
-                Email = user.Email ?? string.Empty
+                Email = user.Email ?? string.Empty,
+                PhotoUrl = user.PhotoUrl ?? string.Empty,
+                Role = user.Roles?.FirstOrDefault()?.Name ?? string.Empty,
             };
         }
     }

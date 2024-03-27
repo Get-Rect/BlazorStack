@@ -83,6 +83,12 @@
         border-radius: 50%;
     }
 
+.profile-photo img {
+    width: 50px; /* Adjust based on your needs */
+    height: 50px;
+    border-radius: 50%;
+}
+
 .context-menu {
     position: absolute;
     top: 100%;
@@ -130,6 +136,17 @@
     justify-content: space-between;
     align-items: center;
 }
+
+    .users-list .header {
+        font-weight: bold;
+        box-shadow: none;
+    }
+
+    .user-card > span, .user-card > .actions {
+        flex-basis: 0;
+        flex-grow: 1;
+        text-align: center;
+    }
 
 .user-info div {
     margin-bottom: 5px;

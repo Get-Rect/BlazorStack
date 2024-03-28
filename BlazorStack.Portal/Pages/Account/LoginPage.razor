@@ -7,6 +7,7 @@
 @inject ApplicationAPIService _api;
 @inject ILocalStorageService _localStorage;
 @inject NavigationManager _nav;
+@inject AuthenticationStateProvider _state;
 
 
 <div class="login-card">
@@ -61,6 +62,6 @@
 
         var loginResponse = await _api.Login(email, password);
         await _localStorage.SetItemAsStringAsync("token", loginResponse?.AccessToken ?? string.Empty);
-        _nav.NavigateTo("/");
+        _nav.NavigateTo(_nav.BaseUri);
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using BlazorStack.Services.Models;
 using BlazorStack.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlazorStack.API.Controllers
 {
@@ -14,12 +15,16 @@ namespace BlazorStack.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
+        private readonly UserManager<ApplicationUser> _users;
+        private readonly RoleManager<IdentityRole> _roles;
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public UsersController(ILogger<WeatherForecastController> logger, ApplicationDbContext db)
+        public UsersController(ILogger<WeatherForecastController> logger, ApplicationDbContext db, UserManager<ApplicationUser> users, RoleManager<IdentityRole> roles)
         {
             _logger = logger;
             _db = db;
+            _users = users;
+            _roles = roles;
         }
 
         [HttpGet(Name = "Users")]
@@ -34,6 +39,38 @@ namespace BlazorStack.API.Controllers
                 user.Role = roles.FirstOrDefault(x => x.Id == userRoles.FirstOrDefault(y => y.UserId == user.Id)?.RoleId)?.Name ?? string.Empty;
             }
             return userViewModels;
+        }
+
+        [HttpPost(Name = "Create User")]
+        public async Task<bool> CreateUser(UserViewModel newUser)
+        {
+            var result = await _users.CreateAsync(new ApplicationUser()
+            {
+                Email = newUser.Email,
+                UserName = newUser.Email,
+            }, newUser.Password);
+
+            if (!result.Succeeded) return false;
+
+            var createdUser = await _users.FindByEmailAsync(newUser.Email);
+            if (createdUser == null) return false;
+
+            if (string.IsNullOrEmpty(newUser.Role)) return true;
+
+            var roleResult = await _users.AddToRoleAsync(createdUser, newUser.Role);
+            if (!roleResult.Succeeded)
+            {
+                await _users.DeleteAsync(createdUser);
+                return false;
+            }
+
+            return true;
+        }
+
+        [HttpGet("allroles", Name = "Get All Roles")]
+        public async Task<List<string>?> GetAllRoles()
+        {
+            return _roles.Roles.Select(x => x.Name ?? string.Empty)?.Where(x => !string.IsNullOrEmpty(x))?.ToList();
         }
 
         [HttpGet("{Id}",Name = "User")]

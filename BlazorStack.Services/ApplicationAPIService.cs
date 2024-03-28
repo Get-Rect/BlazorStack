@@ -36,6 +36,32 @@ namespace BlazorStack.Services
         //    return result.IsSuccessStatusCode;
         //}
 
+        public async Task<List<string>?> GetAllRoles()
+        {
+            try
+            {
+                var result = await _http.GetAsync("users/allroles");
+                return await result.Content.ReadFromJsonAsync<List<string>>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> CreateUser(UserViewModel newUser)
+        {
+            try
+            {
+                var result = await _http.PostAsJsonAsync("users", newUser);
+                return result.IsSuccessStatusCode;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public async Task<UserInfo?> GetUserInfo()
         {
             try

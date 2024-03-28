@@ -17,9 +17,9 @@ namespace BlazorStack.API.Controllers
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _users;
         private readonly RoleManager<IdentityRole> _roles;
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<UsersController> _logger;
 
-        public UsersController(ILogger<WeatherForecastController> logger, ApplicationDbContext db, UserManager<ApplicationUser> users, RoleManager<IdentityRole> roles)
+        public UsersController(ILogger<UsersController> logger, ApplicationDbContext db, UserManager<ApplicationUser> users, RoleManager<IdentityRole> roles)
         {
             _logger = logger;
             _db = db;

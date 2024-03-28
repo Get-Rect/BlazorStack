@@ -12,9 +12,11 @@ namespace BlazorStack.API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(SignInManager<ApplicationUser> signInManager)
+        public AccountController(ILogger<AccountController> logger, SignInManager<ApplicationUser> signInManager)
         {
+            _logger = logger;
             _signInManager = signInManager;
         }
 

@@ -17,7 +17,7 @@
     </div>
 
     <div class="users-list">
-        <div class="header">
+        <div class="header" style="z-index: 0">
             <span>Photo</span>
             <span>Email</span>
             <span>Role</span>
@@ -47,18 +47,19 @@
     <div class="modal" style="display:block;">
         <div class="modal-content">
             <div class="modal-header" style="background-color: var(--primary);">
+                <span>Create a New User</span>
                 <span class="close" @onclick="ToggleModal">&times;</span>
             </div>
             <div class="modal-body">
                 <input type="email" placeholder="Email" @bind="newUser.Email">
                 <input type="password" placeholder="Password" @bind="newUser.Password">
-                @foreach (var role in roles)
-                {
-                    <div>
-                        <input type="radio" id="@role" name="roleGroup" value="@role" @onchange="@(e => newUser.Role = e.Value.ToString())">
-                        <label for="@role">@role</label>
-                    </div>
-                }
+                <select @bind="newUser.Role">
+                    <option value="">No Role</option>
+                    @foreach (var role in roles)
+                    {
+                        <option value="@role">@role</option>
+                    }
+                </select>
             </div>
             <div class="modal-footer">
                 <button @onclick="HandleSubmit">Submit</button>

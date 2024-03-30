@@ -1,6 +1,7 @@
 ﻿@using BlazorStack.Services
 @using Blazored.LocalStorage
 @using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 
 @page "/login"
 @layout LoginLayout
@@ -37,7 +38,17 @@
     private bool success, errors;
     private string email = string.Empty;
     private string password = string.Empty;
-    private string[] errorList = [];
+    private string[] errorList;
+
+    protected async override Task OnInitializedAsync()
+    {
+        // var currentState = await _state.GetAuthenticationStateAsync();
+        // var isLoggedIn = currentState.User.Identity?.IsAuthenticated == true;
+        // if (isLoggedIn)
+        // {
+        //     _nav.NavigateTo(_nav.BaseUri);
+        // }
+    }
 
     public async Task DoLoginAsync()
     {

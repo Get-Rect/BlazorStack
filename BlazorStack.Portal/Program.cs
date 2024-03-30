@@ -12,7 +12,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddAuthorizationCore();
 
-builder.Services.AddScoped<AuthenticationStateProvider, TokenAuthenticationStateProvider>();
+builder.Services.AddSingleton<AuthenticationStateProvider, TokenAuthenticationStateProvider>();
 
 builder.Services.AddTransient<ApplicationTokenHandler>();
 builder.Services.AddHttpClient<ApplicationAPIService>(client =>

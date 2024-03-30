@@ -62,15 +62,28 @@
 .modal-content {
     background-color: #fefefe;
     margin: 15% auto;
-    padding: 20px;
     border: 1px solid #888;
     width: 80%;
-    border-radius: 5px;
+    border-radius: 1rem;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
 .modal-header {
-    padding: 2px 16px;
+    padding: 0.5rem 1rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 1rem;
+}
+
+.modal-footer {
+    padding: 1rem;
 }
 
 .close {
@@ -88,12 +101,8 @@
         cursor: pointer;
     }
 
-.modal-body {
-    padding: 2px 16px;
-}
-
 input[type="email"], input[type="password"] {
-    width: 95%;
+    width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;

@@ -13,12 +13,28 @@
     }
     else
     {
-        <div class="user-photo" @onclick="AdminUploadPhoto">
-            <img src="@(!string.IsNullOrEmpty(userDetails.PhotoUrl) ? @userDetails.PhotoUrl : "/img/defaultUserPhoto.png")" alt="User Photo" />
-        </div>
-        <div class="user-info">
-            <h2>@userDetails.FirstName @userDetails.LastName</h2>
-            <p>Email: @userDetails.Email</p>
+        <div class="row">
+            <div class="user-photo" @onclick="AdminUploadPhoto">
+                <img src="@(!string.IsNullOrEmpty(userDetails.PhotoUrl) ? @userDetails.PhotoUrl : "/img/defaultUserPhoto.png")" alt="User Photo" />
+            </div>
+            <div class="user-details">
+                <div class="user-detail">
+                    <i class="fa-solid fa-envelope"></i>
+                    @userDetails.Email
+                    @if (viewingUserIsAdmin)
+                    {
+                        <i class="fa-solid fa-pencil"></i>
+                    }
+                </div>
+                <div class="user-detail">
+                    <i class="fa-solid fa-id-badge"></i>
+                    @userDetails.Role
+                    @if (viewingUserIsAdmin)
+                    {
+                        <i class="fa-solid fa-pencil"></i>
+                    }
+                </div>
+            </div>
         </div>
     }
 </div>
@@ -31,9 +47,17 @@
 
     private UserDetailsViewModel? userDetails;
 
+    private bool viewingUserIsAdmin = false;
+
     protected override async Task OnInitializedAsync()
     {
         userDetails = await _api.GetUser(Id);
+        viewingUserIsAdmin = CheckIsAdmin();
+    }
+
+    private bool CheckIsAdmin()
+    {
+        return true;
     }
 
     private void AdminUploadPhoto()

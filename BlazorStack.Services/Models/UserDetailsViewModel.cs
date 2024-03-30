@@ -12,5 +12,6 @@ namespace BlazorStack.Services.Models
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string PhotoUrl { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
     }
 }

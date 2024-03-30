@@ -77,12 +77,15 @@ namespace BlazorStack.API.Controllers
         public async Task<UserDetailsViewModel?> GetUser([FromRoute] string Id)
         {
             var user = await _db.Users.FindAsync(Id);
+            var roleId = (await _db.UserRoles.FirstOrDefaultAsync(x => x.UserId == Id))?.RoleId ?? string.Empty;
+            var roleName = (await _db.Roles.FirstOrDefaultAsync(x => x.Id == roleId))?.Name ?? string.Empty;
             var userDetailsViewModel = new UserDetailsViewModel()
             {
                 Email = user?.Email ?? string.Empty,
                 FirstName = string.Empty,
                 LastName = string.Empty,
                 PhotoUrl= string.Empty,
+                Role =  roleName,
             };
             return userDetailsViewModel;
         }

@@ -2,10 +2,15 @@
     --primary: #1190cb;
     --secondary: #0b3954;
     --red: #ff6663;
-    --green: #e0ff4f;
+    --green: #57CC99;
     --background: #F5F8F2;
     --background-light: #FAFFFA;
     --shadow: #E2E2E2;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
 }
 
 .login-card {
@@ -268,6 +273,9 @@ button {
     transition-duration: 0.4s;
     border-radius: 5px;
 }
+    button.green {
+        background-color: var(--green);
+    }
 
     button:hover {
         background-color: white;

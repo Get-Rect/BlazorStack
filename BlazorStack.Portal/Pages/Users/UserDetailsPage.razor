@@ -35,7 +35,7 @@
                     </div>
                     @if (viewingUserIsAdmin)
                     {
-                        <i class="pointer text-primary fa-solid fa-pencil"></i>
+                        <i @onclick="@ToggleModal" class="pointer text-primary fa-solid fa-pencil"></i>
                     }
                 </div>
 
@@ -43,6 +43,30 @@
         </div>
     }
 </div>
+
+@if (showModal)
+{
+    <div class="modal" style="display:block;">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: var(--primary);">
+                <span>Change User Role</span>
+                <span class="close" @onclick="ToggleModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <select @bind="newRole">
+                    <option value="">No Role</option>
+                    @foreach (var role in roles)
+                    {
+                        <option value="@role">@role</option>
+                    }
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button @onclick="HandleSubmit">Submit</button>
+            </div>
+        </div>
+    </div>
+}
 
 @code {
     [Parameter]
@@ -53,10 +77,28 @@
     private UserDetailsViewModel? userDetails;
 
     private bool viewingUserIsAdmin = false;
+    private bool showModal = false;
+    private string newRole = string.Empty;
+
+    private List<string> roles = new List<string>();
+
+    private async Task HandleSubmit()
+    {
+        // send request to update use rrole to api
+        // update page with new user data
+        ToggleModal();
+    }
+
+    private void ToggleModal()
+    {
+        showModal = !showModal;
+    }
 
     protected override async Task OnInitializedAsync()
     {
+        roles = await _api.GetAllRoles() ?? new();
         userDetails = await _api.GetUser(Id);
+        newRole = userDetails?.Role ?? string.Empty;
         viewingUserIsAdmin = CheckIsAdmin();
     }
 

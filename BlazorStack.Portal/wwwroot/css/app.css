@@ -11,6 +11,46 @@
 .row {
     display: flex;
     flex-direction: row;
+    gap: 1rem;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.text-primary {
+    color: var(--primary);
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.user-detail {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+.icon-field {
+    border: 1px solid var(--primary);
+    border-radius: 1rem;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.w-600 {
+    width: 600px;
+}
+
+.w-200 {
+    width: 200px;
 }
 
 .login-card {
@@ -207,16 +247,16 @@ input[type="email"], input[type="password"] {
     align-items: center;
 }
 
-    .users-list .header {
-        font-weight: bold;
-        box-shadow: none;
-    }
+.users-list .header {
+    font-weight: bold;
+    box-shadow: none;
+}
 
-    .user-card > span, .user-card > .actions {
-        flex-basis: 0;
-        flex-grow: 1;
-        text-align: center;
-    }
+.user-card > span, .user-card > .actions {
+    flex-basis: 0;
+    flex-grow: 1;
+    text-align: center;
+}
 
 .user-info div {
     margin-bottom: 5px;
@@ -273,6 +313,7 @@ button {
     transition-duration: 0.4s;
     border-radius: 5px;
 }
+
     button.green {
         background-color: var(--green);
     }

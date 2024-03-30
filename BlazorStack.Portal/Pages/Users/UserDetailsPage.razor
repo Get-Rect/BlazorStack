@@ -19,21 +19,26 @@
             </div>
             <div class="user-details">
                 <div class="user-detail">
-                    <i class="fa-solid fa-envelope"></i>
-                    @userDetails.Email
+                    <div class="icon-field w-200">
+                        <i class="text-primary fa-solid fa-envelope"></i>
+                        @userDetails.Email
+                    </div>
                     @if (viewingUserIsAdmin)
                     {
-                        <i class="fa-solid fa-pencil"></i>
+                        <i class="pointer text-primary fa-solid fa-pencil"></i>
                     }
                 </div>
                 <div class="user-detail">
-                    <i class="fa-solid fa-id-badge"></i>
-                    @userDetails.Role
+                    <div class="icon-field w-200">
+                        <i class="text-primary fa-solid fa-id-badge"></i>
+                        @userDetails.Role
+                    </div>
                     @if (viewingUserIsAdmin)
                     {
-                        <i class="fa-solid fa-pencil"></i>
+                        <i class="pointer text-primary fa-solid fa-pencil"></i>
                     }
                 </div>
+
             </div>
         </div>
     }

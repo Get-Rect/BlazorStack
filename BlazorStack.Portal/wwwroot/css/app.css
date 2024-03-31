@@ -133,7 +133,7 @@
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 100;
     left: 0;
     top: 0;
     width: 100%;
@@ -285,6 +285,17 @@ input[type="email"], input[type="password"] {
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+}
+
+input.rounded {
+    border-radius: 1rem;
+    border: 2px solid var(--primary);
+    padding: 0.75rem;
+}
+
+select.rounded {
+    padding: 0.5rem;
+    border-radius: 1rem;
 }
 
 .list-header {

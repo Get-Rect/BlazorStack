@@ -13,7 +13,7 @@
 
     <div class="filter-row">
         <!-- Add filter elements here -->
-        <input type="text" placeholder="Search users..." @oninput="OnSearchChanged" />
+        <input class="rounded" type="text" placeholder="Search users..." @oninput="OnSearchChanged" />
         <button class="green" @onclick="ToggleModal"><i class="fa-solid fa-plus"></i></button>
     </div>
 
@@ -44,31 +44,19 @@
     </div>
 </div>
 
-@if (showModal)
-{
-    <div class="modal" style="display:block;">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: var(--primary);">
-                <span>Create a New User</span>
-                <span class="close" @onclick="ToggleModal">&times;</span>
-            </div>
-            <div class="modal-body">
-                <input type="email" placeholder="Email" @bind="newUser.Email">
-                <input type="password" placeholder="Password" @bind="newUser.Password">
-                <select @bind="newUser.Role">
-                    <option value="">No Role</option>
-                    @foreach (var role in roles)
-                    {
-                        <option value="@role">@role</option>
-                    }
-                </select>
-            </div>
-            <div class="modal-footer">
-                <button @onclick="HandleSubmit">Submit</button>
-            </div>
-        </div>
-    </div>
-}
+<Modal Title="Create User" @bind-IsVisible="showModal" OnSubmit="HandleSubmit">
+    <ChildContent>
+        <input type="email" placeholder="Email" @bind="newUser.Email">
+        <input type="password" placeholder="Password" @bind="newUser.Password">
+        <select class="rounded" @bind="newUser.Role">
+            <option value="">No Role</option>
+            @foreach (var role in roles)
+            {
+                <option value="@role">@role</option>
+            }
+        </select>
+    </ChildContent>
+</Modal>
 
 <Modal Title="Delete User" @bind-IsVisible="showDeleteModal" OnSubmit="@(() => DeleteUser(UserToDelete))">
     <ChildContent>

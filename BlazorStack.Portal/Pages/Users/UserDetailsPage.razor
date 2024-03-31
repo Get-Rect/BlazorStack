@@ -48,7 +48,7 @@
 
 <Modal @bind-IsVisible="showRoleModal" OnSubmit="HandleRoleSubmit" Title="Update User Role">
     <ChildContent>
-        <select @bind="newRole">
+        <select class="rounded" @bind="newRole">
             <option value="">No Role</option>
             @foreach (var role in roles)
             {

@@ -564,3 +564,54 @@ body {
 code {
     color: #c02d76;
 }
+
+.notification-wrapper {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.notification {
+    margin: 0.5rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    color: white;
+    opacity: 0;
+    animation: slideIn 0.5s forwards, fadeOut 15s 14.5s forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.success {
+    background-color: green;
+}
+
+.warning {
+    background-color: orange;
+}
+
+.error {
+    background-color: red;
+}

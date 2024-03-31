@@ -1,6 +1,9 @@
-﻿@using Microsoft.AspNetCore.Authorization
+﻿@using BlazorStack.Portal.Models
+@using BlazorStack.Portal.Services
+@using Microsoft.AspNetCore.Authorization
 @page "/"
 @attribute [Authorize]
+@inject NotificationService NotificationService
 
 <PageTitle>Home</PageTitle>
 
@@ -8,5 +11,12 @@
     <h1>Welcome to B#</h1>
 
     This application is an example of how simple and performant Blazor web assembly applications can be using ASP.NET Identity for security and no custom Javascript.
+    <button @onclick="ShowSuccess">Show Success</button>
 </div>
 
+@code {
+    private void ShowSuccess()
+    {
+        NotificationService.ShowNotification("Operation successful!", NotificationType.Success);
+    }
+}

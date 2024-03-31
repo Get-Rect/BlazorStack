@@ -1,0 +1,24 @@
+﻿@using System.Threading.Tasks
+@using BlazorStack.Portal.Services
+@inject NotificationService NotificationService
+
+<div class="notification-wrapper">
+    @foreach (var message in NotificationService.Messages)
+    {
+        <div class="@($"notification {message.Type.ToString().ToLower()}")">
+            @message.Message
+        </div>
+    }
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        NotificationService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        NotificationService.OnChange -= StateHasChanged;
+    }
+}

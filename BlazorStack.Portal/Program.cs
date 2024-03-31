@@ -1,6 +1,7 @@
 using Blazored.LocalStorage;
 using BlazorStack.Portal;
 using BlazorStack.Portal.Auth;
+using BlazorStack.Portal.Services;
 using BlazorStack.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -13,6 +14,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddAuthorizationCore();
 
 builder.Services.AddSingleton<AuthenticationStateProvider, TokenAuthenticationStateProvider>();
+builder.Services.AddSingleton<NotificationService>();
+
 
 builder.Services.AddTransient<ApplicationTokenHandler>();
 builder.Services.AddHttpClient<ApplicationAPIService>(client =>

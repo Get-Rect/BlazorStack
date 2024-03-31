@@ -6,7 +6,9 @@
                 <span>@Title</span>
                 <span class="close" @onclick="ToggleModal">&times;</span>
             </div>
-            @ChildContent
+            <div class="modal-body">
+                @ChildContent
+            </div>
             <div class="modal-footer">
                 <button @onclick="@(async () => await OnSubmit.InvokeAsync())">Submit</button>
             </div>

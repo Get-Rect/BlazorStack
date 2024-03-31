@@ -8,6 +8,10 @@
     --shadow: #E2E2E2;
 }
 
+.text-red {
+    color: var(--red);
+}
+
 .badge {
     display: flex;
     align-items: center;
@@ -72,6 +76,18 @@
     width: 200px;
 }
 
+.w-50 {
+    width: 50px;
+}
+
+.w-100 {
+    width: 100px;
+}
+
+.hide-overflow {
+    overflow: hidden;
+}
+
 .login-card {
     background-color: white;
     padding: 2rem;
@@ -100,6 +116,10 @@
     padding: 20px; /* Padding inside the card */
     background-color: white; /* Background color of the card */
     border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: fit-content;
 }
 
 /* You might want to add additional media queries for responsiveness */
@@ -127,7 +147,7 @@
     background-color: #fefefe;
     margin: 15% auto;
     border: 1px solid #888;
-    width: 80%;
+    width: 33%;
     border-radius: 1rem;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
@@ -264,6 +284,20 @@ input[type="email"], input[type="password"] {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
+}
+
+.list-header {
+    display: flex;
+    padding: 15px;
+    margin-bottom: 0.5rem;
+    gap: 1rem;
+}
+
+.user-actions {
+    display: flex;
+    justify-content: right;
+    gap: 0.5rem;
 }
 
 .users-list .header {

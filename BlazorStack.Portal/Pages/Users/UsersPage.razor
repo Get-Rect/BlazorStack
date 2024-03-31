@@ -1,5 +1,6 @@
 ﻿@using BlazorStack.Services
 @using BlazorStack.Services.Models
+@using BlazorStack.Portal.Components
 @using Microsoft.AspNetCore.Authorization
 
 @page "/users"
@@ -17,24 +18,25 @@
     </div>
 
     <div class="users-list">
-        <div class="header" style="z-index: 0">
-            <span>Photo</span>
-            <span>Email</span>
-            <span>Role</span>
-            <span>Actions</span>
+        <div class="list-header" style="z-index: 0">
+            <span class="w-50">Photo</span>
+            <span class="w-200">Email</span>
+            <span class="w-100">Role</span>
+            <span class="w-50">Actions</span>
         </div>
         @if (FilteredUsers is not null)
         {
             @foreach (var user in FilteredUsers)
             {
                 <div class="user-card">
-                    <div class="profile-photo">
+                    <div class="profile-photo w-50">
                         <img src="@(!string.IsNullOrEmpty(user.PhotoUrl) ? user.PhotoUrl : "/img/defaultUserPhoto.png")" />
                     </div>
-                    <div>@user.Email</div>
-                    <div>@user.Role</div>
-                    <div class="user-actions">
+                    <div class="w-200 hide-overflow">@user.Email</div>
+                    <div class="w-100">@user.Role</div>
+                    <div class="w-50 user-actions">
                         <i class="primary pointer fa-solid fa-eye" @onclick="() => ViewUser(user)"></i>
+                        <i class="text-red pointer fa-solid fa-trash" @onclick="() => ShowDeleteModal(user)"></i>
                     </div>
                 </div>
             }
@@ -68,10 +70,18 @@
     </div>
 }
 
+<Modal Title="Delete User" @bind-IsVisible="showDeleteModal" OnSubmit="@(() => DeleteUser(UserToDelete))">
+    <ChildContent>
+        <span>Are you sure you want to delete @(UserToDelete?.Email ?? "Something went wrong.")?</span>
+    </ChildContent>
+    </Modal>
+
 @code {
     private UserViewModel newUser = new UserViewModel();
     private bool showModal = false;
+    private bool showDeleteModal = false;
     private List<string> roles = new List<string>();
+    private UserViewModel? UserToDelete;
     private List<UserViewModel>? Users = new List<UserViewModel>(); // Populate this list with your users
     private List<UserViewModel>? FilteredUsers => Users?.Where(u => u.FirstName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                                                          u.LastName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
@@ -101,6 +111,27 @@
     private void ViewUser(UserViewModel user)
     {
         _nav.NavigateTo($"/users/{user.Id}");
+    }
+
+    private void ShowDeleteModal(UserViewModel user)
+    {
+        UserToDelete = user;
+        showDeleteModal = true;
+    }
+
+    private async Task DeleteUser(UserViewModel? user)
+    {
+        UserToDelete = null;
+        showDeleteModal = false;
+
+        if(user is null)
+        {
+            // show notification 
+        }
+        else
+        {
+            // make an api call to delete the user
+        }
     }
 
     private async Task HandleSubmit()

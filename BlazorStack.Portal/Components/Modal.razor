@@ -1,4 +1,4 @@
-﻿@if (isVisible)
+﻿@if (IsVisible)
 {
     <div class="modal" style="display:block;">
         <div class="modal-content">
@@ -16,10 +16,13 @@
 
 @code {
     [Parameter]
-    public bool isVisible { get; set; }
+    public bool IsVisible { get; set; }
 
     [Parameter]
     public EventCallback OnSubmit { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> IsVisibleChanged { get; set; }
 
     [Parameter]
     public string Title { get; set; } = string.Empty;
@@ -27,8 +30,9 @@
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    public void ToggleModal()
+    public async Task ToggleModal()
     {
-        isVisible = !isVisible;
+        IsVisible = !IsVisible;
+        await IsVisibleChanged.InvokeAsync(IsVisible);
     }
 }

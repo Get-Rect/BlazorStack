@@ -55,7 +55,7 @@
     }
 </div>
 
-<Modal isVisible=showRoleModal OnSubmit="HandleRoleSubmit" Title="Update User Role">
+<Modal @bind-IsVisible="showRoleModal" OnSubmit="HandleRoleSubmit" Title="Update User Role">
     <ChildContent>
         <div class="modal-body">
             <select @bind="newRole">
@@ -69,7 +69,7 @@
     </ChildContent>
 </Modal>
 
-<Modal isVisible="showPasswordModal" Title="Update Password" OnSubmit="HandlePasswordSubmit">
+<Modal @bind-IsVisible="showPasswordModal" Title="Update Password" OnSubmit="HandlePasswordSubmit">
     <ChildContent>
         <div class="modal-body">
             <input type="password" placeholder="New Password" @bind="newPassword">

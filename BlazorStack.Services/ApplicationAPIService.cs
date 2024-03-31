@@ -113,5 +113,18 @@ namespace BlazorStack.Services
                 return null;
             }
         }
+
+        public async Task<bool?> ChangePassword(string id, string newPassword)
+        {
+            try
+            {
+                var result = await _http.PostAsJsonAsync($"users/change-password/{id}", new ChangePasswordRequest { newPassword = newPassword });
+                return await result.Content.ReadFromJsonAsync<bool>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }

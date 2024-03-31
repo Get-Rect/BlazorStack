@@ -70,7 +70,18 @@ namespace BlazorStack.API.Controllers
         [HttpGet("allroles", Name = "Get All Roles")]
         public async Task<List<string>?> GetAllRoles()
         {
-            return _roles.Roles.Select(x => x.Name ?? string.Empty)?.Where(x => !string.IsNullOrEmpty(x))?.ToList();
+            return await _roles.Roles.Select(x => x.Name ?? string.Empty)?.Where(x => !string.IsNullOrEmpty(x))?.ToListAsync();
+        }
+
+        [HttpPost("change-password/{id}", Name = "Change Password")]
+        public async Task<bool> ChangePassword([FromRoute] string id, [FromBody] ChangePasswordRequest request)
+        {
+            var newPassword = request.newPassword;
+            var user = await _users.FindByIdAsync(id);
+            if (user == null) return false;
+            var token = await _users.GeneratePasswordResetTokenAsync(user);
+            var result = await _users.ResetPasswordAsync(user, token, newPassword);
+            return result.Succeeded;
         }
 
         [HttpGet("{Id}",Name = "User")]

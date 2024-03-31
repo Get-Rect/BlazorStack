@@ -90,7 +90,7 @@
 
     private async Task HandlePasswordSubmit()
     {
-        // send request to update user password
+        await _api.ChangePassword(Id, newPassword);
         // show notification of success or failure
         TogglePasswordModal();
     }

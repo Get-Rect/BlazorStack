@@ -1,5 +1,6 @@
 ﻿@using BlazorStack.Services
 @using BlazorStack.Services.Models
+@using BlazorStack.Portal.Components
 @using Microsoft.AspNetCore.Authorization
 
 @page "/users/{Id}"
@@ -29,44 +30,52 @@
                     }
                 </div>
                 <div class="user-detail">
-                    <div class="icon-field w-200">
-                        <i class="text-primary fa-solid fa-id-badge"></i>
-                        @userDetails.Role
-                    </div>
+                    @if (!string.IsNullOrEmpty(userDetails.Role))
+                    {
+                        <div class="badge">
+                            <i class="icon-left fa-solid fa-id-badge"></i>
+                            <span class="text-right">@userDetails.Role</span>
+                        </div>
+                    }
+
                     @if (viewingUserIsAdmin)
                     {
-                        <i @onclick="@ToggleModal" class="pointer text-primary fa-solid fa-pencil"></i>
+                        <i @onclick="@ToggleRoleModal" class="pointer text-primary fa-solid fa-pencil"></i>
                     }
                 </div>
-
             </div>
+            @if (viewingUserIsAdmin)
+            {
+                <div class="user-actions">
+                    <button @onclick="ToggleRoleModal">Update Role</button>
+                    <button @onclick="TogglePasswordModal">Change Password</button>
+                </div>
+            }
         </div>
     }
 </div>
 
-@if (showModal)
-{
-    <div class="modal" style="display:block;">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: var(--primary);">
-                <span>Change User Role</span>
-                <span class="close" @onclick="ToggleModal">&times;</span>
-            </div>
-            <div class="modal-body">
-                <select @bind="newRole">
-                    <option value="">No Role</option>
-                    @foreach (var role in roles)
-                    {
-                        <option value="@role">@role</option>
-                    }
-                </select>
-            </div>
-            <div class="modal-footer">
-                <button @onclick="HandleSubmit">Submit</button>
-            </div>
+<Modal isVisible=showRoleModal OnSubmit="HandleRoleSubmit" Title="Update User Role">
+    <ChildContent>
+        <div class="modal-body">
+            <select @bind="newRole">
+                <option value="">No Role</option>
+                @foreach (var role in roles)
+                {
+                    <option value="@role">@role</option>
+                }
+            </select>
         </div>
-    </div>
-}
+    </ChildContent>
+</Modal>
+
+<Modal isVisible="showPasswordModal" Title="Update Password" OnSubmit="HandlePasswordSubmit">
+    <ChildContent>
+        <div class="modal-body">
+            <input type="password" placeholder="New Password" @bind="newPassword">
+        </div>
+    </ChildContent>
+</Modal>
 
 @code {
     [Parameter]
@@ -77,21 +86,36 @@
     private UserDetailsViewModel? userDetails;
 
     private bool viewingUserIsAdmin = false;
-    private bool showModal = false;
+    private bool showRoleModal = false;
+    private bool showPasswordModal = false;
     private string newRole = string.Empty;
+    private string newPassword = string.Empty;
 
     private List<string> roles = new List<string>();
 
-    private async Task HandleSubmit()
+    private async Task HandleRoleSubmit()
     {
         // send request to update use rrole to api
         // update page with new user data
-        ToggleModal();
+        // show notification of success or failure
+        ToggleRoleModal();
     }
 
-    private void ToggleModal()
+    private async Task HandlePasswordSubmit()
     {
-        showModal = !showModal;
+        // send request to update user password
+        // show notification of success or failure
+        TogglePasswordModal();
+    }
+
+    private void ToggleRoleModal()
+    {
+        showRoleModal = !showRoleModal;
+    }
+
+    private void TogglePasswordModal()
+    {
+        showPasswordModal = !showPasswordModal;
     }
 
     protected override async Task OnInitializedAsync()
@@ -99,6 +123,7 @@
         roles = await _api.GetAllRoles() ?? new();
         userDetails = await _api.GetUser(Id);
         newRole = userDetails?.Role ?? string.Empty;
+
         viewingUserIsAdmin = CheckIsAdmin();
     }
 

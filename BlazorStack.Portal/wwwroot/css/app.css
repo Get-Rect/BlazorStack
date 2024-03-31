@@ -8,6 +8,25 @@
     --shadow: #E2E2E2;
 }
 
+.badge {
+    display: flex;
+    align-items: center;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 10px; /* Adjust for desired roundness */
+    padding: 5px 10px; /* Adjust for desired spacing */
+}
+
+    .badge .icon-left {
+        margin-right: 5px; /* Space between icon and text */
+    }
+
+    .badge .text-right {
+        flex-grow: 1;
+        text-align: right;
+    }
+
+
 .row {
     display: flex;
     flex-direction: row;

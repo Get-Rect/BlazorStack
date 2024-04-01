@@ -42,7 +42,7 @@ namespace BlazorStack.API.Controllers
         }
 
         [HttpPost(Name = "Create User")]
-        public async Task<bool> CreateUser(UserViewModel newUser)
+        public async Task<IActionResult> CreateUser(UserViewModel newUser)
         {
             var result = await _users.CreateAsync(new ApplicationUser()
             {
@@ -50,21 +50,21 @@ namespace BlazorStack.API.Controllers
                 UserName = newUser.Email,
             }, newUser.Password);
 
-            if (!result.Succeeded) return false;
+            if (!result.Succeeded) return BadRequest(result.Errors.Select(x => x.Description));
 
             var createdUser = await _users.FindByEmailAsync(newUser.Email);
-            if (createdUser == null) return false;
+            if (createdUser == null) return BadRequest(new List<string>() { "Failed to find created user." });
 
-            if (string.IsNullOrEmpty(newUser.Role)) return true;
+            if (string.IsNullOrEmpty(newUser.Role)) return Created();
 
             var roleResult = await _users.AddToRoleAsync(createdUser, newUser.Role);
             if (!roleResult.Succeeded)
             {
                 await _users.DeleteAsync(createdUser);
-                return false;
+                return BadRequest(roleResult.Errors.Select(x => x.Description));
             }
 
-            return true;
+            return Created();
         }
 
         [HttpGet("allroles", Name = "Get All Roles")]

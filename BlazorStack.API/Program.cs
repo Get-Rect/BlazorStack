@@ -1,3 +1,4 @@
+using BlazorStack.API.Middleware;
 using BlazorStack.Data;
 using BlazorStack.Data.Contexts;
 using BlazorStack.Data.Models;
@@ -55,6 +56,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseMiddleware<ResponseTransformationMiddleware>();
 app.MapIdentityApi<ApplicationUser>();
 app.UseCors("wasm");
 

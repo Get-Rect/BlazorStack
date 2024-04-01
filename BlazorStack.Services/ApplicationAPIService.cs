@@ -18,7 +18,7 @@ namespace BlazorStack.Services
             _http = http;
         }
 
-        public async Task<LoginResponse?> Login(string email, string password)
+        public async Task<ApplicationResponse<LoginResponse>?> Login(string email, string password)
         {
             var result = await _http.PostAsJsonAsync(
                 "login?useCookies=false", new
@@ -26,7 +26,8 @@ namespace BlazorStack.Services
                     email,
                     password
                 });
-            var response = await result.Content.ReadFromJsonAsync<LoginResponse>();
+            var test = await result.Content.ReadAsStringAsync();
+            var response = await result.Content.ReadFromJsonAsync<ApplicationResponse<LoginResponse>>();
             return response;
         }
 

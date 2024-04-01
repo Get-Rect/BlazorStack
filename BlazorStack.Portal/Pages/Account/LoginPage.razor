@@ -72,7 +72,7 @@
         }
 
         var loginResponse = await _api.Login(email, password);
-        await _localStorage.SetItemAsStringAsync("token", loginResponse?.AccessToken ?? string.Empty);
+        await _localStorage.SetItemAsStringAsync("token", loginResponse?.Data?.AccessToken ?? string.Empty);
         _nav.NavigateTo(_nav.BaseUri);
     }
 }

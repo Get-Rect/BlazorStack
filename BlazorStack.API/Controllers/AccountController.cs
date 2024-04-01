@@ -1,4 +1,5 @@
 ﻿using BlazorStack.Data.Models;
+using BlazorStack.Services.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

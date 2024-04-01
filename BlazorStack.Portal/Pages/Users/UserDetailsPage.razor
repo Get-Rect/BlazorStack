@@ -115,10 +115,14 @@
 
     private async Task HandleRoleSubmit()
     {
-        // send request to update use rrole to api
-        // update page with new user data
-        // show notification of success or failure
-        ToggleRoleModal();
+        var response = await _api.UpdateRole(Id, newRole);
+        if (!response?.IsSuccess == true) _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to update role." });
+        else
+        {
+            _notifications.ShowNotification("Successfully updated role", Models.NotificationType.Success);
+            ToggleRoleModal();
+        }
+        await RefreshUser();
     }
 
     private async Task HandlePasswordSubmit()

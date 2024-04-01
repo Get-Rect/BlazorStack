@@ -92,6 +92,29 @@ namespace BlazorStack.API.Controllers
             else return Ok(true);
         }
 
+        [HttpPost("update-role/{id}", Name = "Update Role")]
+        public async Task<IActionResult> UpdateRole([FromRoute] string id, [FromBody] UpdateRoleRequest request)
+        {
+            var user = await _users.FindByIdAsync(id);
+            if (user == null) return BadRequest(new List<string>() { "User not found." });
+            var userRoles = await _users.GetRolesAsync(user);
+            if (userRoles.Any())
+            {
+                var removeRolesResult = await _users.RemoveFromRolesAsync(user, userRoles);
+                if(!removeRolesResult.Succeeded) return BadRequest(removeRolesResult.Errors.Select(x => x.Description).ToList());
+            }
+
+            var newRoleName = request.NewRole;
+            if (string.IsNullOrEmpty(newRoleName)) return Ok(true);
+
+            var newRole = _roles.RoleExistsAsync(newRoleName);
+            if (newRole is null) return BadRequest("Role does not exist.");
+
+            var result = await _users.AddToRoleAsync(user, newRoleName);
+            if (!result.Succeeded) return BadRequest(result.Errors.Select(x => x.Description).ToList());
+            else return Ok(true);
+        }
+
         [HttpDelete("{id}", Name = "Delete User")]
         public async Task<IActionResult> DeleteUser([FromRoute] string id)
         {

@@ -110,6 +110,13 @@ namespace BlazorStack.Services
             return content;
         }
 
+        public async Task<ApplicationResponse<bool?>?> UpdateRole(string id, string newRole)
+        {
+            var response = await _http.PostAsJsonAsync($"users/update-role/{id}", new UpdateRoleRequest { NewRole = newRole });
+            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
+            return content;
+        }
+
         public async Task<ApplicationResponse<bool?>?> DeleteUser(string id)
         {
             var response = await _http.DeleteAsync($"users/{id}");

@@ -14,18 +14,23 @@ namespace BlazorStack.Portal.Services
 
         public event Action OnChange;
 
-        public void ShowNotification(string message, NotificationType type)
+        public async void ShowNotification(string message, NotificationType type)
         {
-            _messages.Insert(0, new NotificationMessage { Message = message, Type = type });
+            var notificationMessage = new NotificationMessage { Message = message, Type = type };
+            _messages.Insert(0, notificationMessage);
 
-            // Keep only the 5 most recent messages
             if (_messages.Count > 5)
             {
                 _messages.RemoveAt(5);
             }
 
             NotifyStateChanged();
+
+            await Task.Delay(10000); // Wait for 10 seconds
+            _messages.Remove(notificationMessage);
+            NotifyStateChanged();
         }
+
 
         public void ShowErrorNotifications(List<string> errors)
         {

@@ -39,7 +39,7 @@ namespace BlazorStack.Services
 
         public async Task<ApplicationResponse<List<string>>?> GetAllRoles()
         {
-            var response = await _http.GetAsync("users/allroles/notfound");
+            var response = await _http.GetAsync("users/allroles");
             var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<List<string>>>();
             return content;
         }
@@ -96,30 +96,19 @@ namespace BlazorStack.Services
             }
         }
 
-        public async Task<UserDetailsViewModel?> GetUser(string id)
+        public async Task<ApplicationResponse<UserDetailsViewModel>?> GetUser(string id)
         {
-            try
-            {
-                var result = await _http.GetAsync($"users/{id}");
-                return await result.Content.ReadFromJsonAsync<UserDetailsViewModel>();
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            var response = await _http.GetAsync($"users/{id}");
+            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<UserDetailsViewModel>?>();
+            return content;
         }
 
-        public async Task<bool?> ChangePassword(string id, string newPassword)
+        public async Task<ApplicationResponse<bool?>?> ChangePassword(string id, string newPassword)
         {
-            try
-            {
-                var result = await _http.PostAsJsonAsync($"users/change-password/{id}", new ChangePasswordRequest { newPassword = newPassword });
-                return await result.Content.ReadFromJsonAsync<bool>();
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            var response = await _http.PostAsJsonAsync($"users/change-password/{id}", new ChangePasswordRequest { newPassword = newPassword });
+            var test = await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
+            return content;
         }
     }
 }

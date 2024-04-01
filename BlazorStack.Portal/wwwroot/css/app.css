@@ -579,7 +579,7 @@ code {
     border-radius: 0.5rem;
     color: white;
     opacity: 0;
-    animation: slideIn 0.5s forwards, fadeOut 15s 14.5s forwards;
+    animation: slideIn 0.5s forwards, fadeOut 1s 9s forwards;
 }
 
 @keyframes slideIn {

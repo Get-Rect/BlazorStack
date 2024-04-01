@@ -81,14 +81,15 @@ namespace BlazorStack.API.Controllers
         }
 
         [HttpPost("change-password/{id}", Name = "Change Password")]
-        public async Task<bool> ChangePassword([FromRoute] string id, [FromBody] ChangePasswordRequest request)
+        public async Task<IActionResult> ChangePassword([FromRoute] string id, [FromBody] ChangePasswordRequest request)
         {
             var newPassword = request.newPassword;
             var user = await _users.FindByIdAsync(id);
-            if (user == null) return false;
+            if (user == null) return BadRequest(new List<string>() { "User not found." });
             var token = await _users.GeneratePasswordResetTokenAsync(user);
             var result = await _users.ResetPasswordAsync(user, token, newPassword);
-            return result.Succeeded;
+            if (result.Errors.Any()) return BadRequest(result.Errors.Select(x => x.Description).ToList());
+            else return Ok(true);
         }
 
         [HttpGet("{Id}", Name = "User")]

@@ -1,10 +1,12 @@
-﻿@using BlazorStack.Services
+﻿@using BlazorStack.Portal.Services
+@using BlazorStack.Services
 @using BlazorStack.Services.Models
 @using BlazorStack.Portal.Components
 @using Microsoft.AspNetCore.Authorization
 
 @page "/users/{Id}"
 @inject ApplicationAPIService _api;
+@inject NotificationService _notifications;
 @attribute [Authorize]
 
 <div class="scrollable-card">
@@ -68,10 +70,7 @@
     [Parameter]
     public string Id { get; set; } = string.Empty;
 
-    private readonly string DefaultPhotoUrl = "Some file in wwwroot.";
-
     private UserDetailsViewModel? userDetails;
-
     private bool viewingUserIsAdmin = false;
     private bool showRoleModal = false;
     private bool showPasswordModal = false;
@@ -79,6 +78,40 @@
     private string newPassword = string.Empty;
 
     private List<string> roles = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshRoles();
+        await RefreshUser();
+        viewingUserIsAdmin = CheckIsAdmin();
+    }
+
+    private async Task RefreshUser()
+    {
+        var response = await _api.GetUser(Id);
+        if (response?.IsSuccess == true)
+        {
+            userDetails = response?.Data ?? new();
+            newRole = userDetails?.Role ?? string.Empty;
+        }
+        else
+        {
+            _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to process response." });
+        }
+    }
+
+    private async Task RefreshRoles()
+    {
+        var response = await _api.GetAllRoles();
+        if (response?.IsSuccess == true)
+        {
+            roles = response?.Data ?? new();
+        }
+        else
+        {
+            _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to process response." });
+        }
+    }
 
     private async Task HandleRoleSubmit()
     {
@@ -90,9 +123,13 @@
 
     private async Task HandlePasswordSubmit()
     {
-        await _api.ChangePassword(Id, newPassword);
-        // show notification of success or failure
-        TogglePasswordModal();
+        var response = await _api.ChangePassword(Id, newPassword);
+        if (!response?.IsSuccess == true) _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to update password." });
+        else
+        {
+            _notifications.ShowNotification("Successfully updated password", Models.NotificationType.Success);
+            TogglePasswordModal();
+        }
     }
 
     private void ToggleRoleModal()
@@ -105,16 +142,6 @@
     {
         newPassword = string.Empty;
         showPasswordModal = !showPasswordModal;
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var response = await _api.GetAllRoles();
-        roles = response?.Data ?? new();
-        userDetails = await _api.GetUser(Id);
-        newRole = userDetails?.Role ?? string.Empty;
-
-        viewingUserIsAdmin = CheckIsAdmin();
     }
 
     private bool CheckIsAdmin()

@@ -77,11 +77,11 @@
         if (loginResponse?.IsSuccess == true)
         {
             await _localStorage.SetItemAsStringAsync("token", loginResponse?.Data?.AccessToken ?? string.Empty);
-            _nav.NavigateTo(_nav.BaseUri);
+            _nav.NavigateTo(_nav.BaseUri, true);
         }
         else
         {
-            _notifications.ShowErrorNotifications(loginResponse?.Errors ?? new() { "Failed to process response." });
+            _notifications.ShowNotification("Failed to login", Models.NotificationType.Error);
         }
     }
 }

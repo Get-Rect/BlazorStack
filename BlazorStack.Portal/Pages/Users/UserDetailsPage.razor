@@ -109,7 +109,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        roles = await _api.GetAllRoles() ?? new();
+        var response = await _api.GetAllRoles();
+        roles = response?.Data ?? new();
         userDetails = await _api.GetUser(Id);
         newRole = userDetails?.Role ?? string.Empty;
 

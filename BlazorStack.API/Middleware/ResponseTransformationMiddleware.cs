@@ -1,4 +1,5 @@
 ﻿using BlazorStack.Services.Models;
+using Microsoft.AspNetCore.Http.Extensions;
 using System.Net;
 using System.Text.Json;
 
@@ -25,7 +26,15 @@ namespace BlazorStack.API.Middleware
             context.Response.Body = originalBodyStream;
             context.Response.ContentType = "application/json";
 
-            if (context.Response.StatusCode >= 200 && context.Response.StatusCode <= 299)
+            if(context.Response.StatusCode == 401)
+            {
+                await HandleUnauthorizedResponse(context, responseBody);
+            }
+            else if(context.Response.StatusCode == 404)
+            {
+                await HandleNotFoundResponse(context, responseBody);
+            }
+            else if (context.Response.StatusCode >= 200 && context.Response.StatusCode <= 299)
             {
                 await HandleSuccessResponse(context, responseBody);
             }
@@ -53,13 +62,38 @@ namespace BlazorStack.API.Middleware
         private async Task HandleErrorResponse(HttpContext context, MemoryStream responseBody)
         {
             responseBody.Seek(0, SeekOrigin.Begin);
-            var errorText = await new StreamReader(responseBody).ReadToEndAsync();
-            var errors = new List<string> { errorText };
+            var readToEnd = await new StreamReader(responseBody).ReadToEndAsync();
+            var data = string.IsNullOrEmpty(readToEnd) ? null : JsonSerializer.Deserialize<List<string>>(readToEnd);
+            var errors = data?.Where(x => !string.IsNullOrEmpty(x)).ToList();
 
             var response = new ApplicationResponse<object>
             {
                 StatusCode = context.Response.StatusCode,
                 Errors = errors,
+                Data = null
+            };
+
+            await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+        }
+
+        private async Task HandleNotFoundResponse(HttpContext context, MemoryStream responseBody)
+        {
+            var response = new ApplicationResponse<object>
+            {
+                StatusCode = context.Response.StatusCode,
+                Errors = new List<string>() { $"{context.Request.GetDisplayUrl()} not found." },
+                Data = null
+            };
+
+            await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+        }
+
+        private async Task HandleUnauthorizedResponse(HttpContext context, MemoryStream responseBody)
+        {
+            var response = new ApplicationResponse<object>
+            {
+                StatusCode = context.Response.StatusCode,
+                Errors = new List<string>() { $"Unauthorized." },
                 Data = null
             };
 

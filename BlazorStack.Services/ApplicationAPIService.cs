@@ -37,17 +37,11 @@ namespace BlazorStack.Services
         //    return result.IsSuccessStatusCode;
         //}
 
-        public async Task<List<string>?> GetAllRoles()
+        public async Task<ApplicationResponse<List<string>>?> GetAllRoles()
         {
-            try
-            {
-                var result = await _http.GetAsync("users/allroles");
-                return await result.Content.ReadFromJsonAsync<List<string>>();
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            var response = await _http.GetAsync("users/allroles/notfound");
+            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<List<string>>>();
+            return content;
         }
 
         public async Task<bool> CreateUser(UserViewModel newUser)
@@ -89,12 +83,12 @@ namespace BlazorStack.Services
             }
         }
 
-        public async Task<List<UserViewModel>?> GetUsers(string search = "")
+        public async Task<ApplicationResponse<List<UserViewModel>>?> GetUsers(string search = "")
         {
             try
             {
                 var result = await _http.GetAsync("users");
-                return await result.Content.ReadFromJsonAsync<List<UserViewModel>>();
+                return await result.Content.ReadFromJsonAsync<ApplicationResponse<List<UserViewModel>>?>();
             }
             catch (Exception)
             {

@@ -1,4 +1,5 @@
-﻿@using BlazorStack.Services
+﻿@using BlazorStack.Portal.Services
+@using BlazorStack.Services
 @using Blazored.LocalStorage
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
@@ -9,6 +10,7 @@
 @inject ILocalStorageService _localStorage;
 @inject NavigationManager _nav;
 @inject AuthenticationStateProvider _state;
+@inject NotificationService _notifications;
 
 
 <div class="login-card">
@@ -72,7 +74,14 @@
         }
 
         var loginResponse = await _api.Login(email, password);
-        await _localStorage.SetItemAsStringAsync("token", loginResponse?.Data?.AccessToken ?? string.Empty);
-        _nav.NavigateTo(_nav.BaseUri);
+        if (loginResponse?.IsSuccess == true)
+        {
+            await _localStorage.SetItemAsStringAsync("token", loginResponse?.Data?.AccessToken ?? string.Empty);
+            _nav.NavigateTo(_nav.BaseUri);
+        }
+        else
+        {
+            _notifications.ShowErrorNotifications(loginResponse?.Errors ?? new() { "Failed to process response." });
+        }
     }
 }

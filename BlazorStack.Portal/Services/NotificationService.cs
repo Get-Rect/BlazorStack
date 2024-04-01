@@ -27,6 +27,14 @@ namespace BlazorStack.Portal.Services
             NotifyStateChanged();
         }
 
+        public void ShowErrorNotifications(List<string> errors)
+        {
+            foreach (var error in errors)
+            {
+                ShowNotification(error, NotificationType.Error);
+            }
+        }
+
         private void NotifyStateChanged() => OnChange?.Invoke();
     }
 

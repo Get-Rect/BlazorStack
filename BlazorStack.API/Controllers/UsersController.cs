@@ -34,7 +34,7 @@ namespace BlazorStack.API.Controllers
             var userRoles = _db.UserRoles.ToList();
             var roles = _db.Roles.ToList();
             var userViewModels = await users.OrderByDescending(x => x.Email).Select(x => ToUserViewModel(x)).ToListAsync();
-            foreach(var user in userViewModels)
+            foreach (var user in userViewModels)
             {
                 user.Role = roles.FirstOrDefault(x => x.Id == userRoles.FirstOrDefault(y => y.UserId == user.Id)?.RoleId)?.Name ?? string.Empty;
             }
@@ -68,9 +68,16 @@ namespace BlazorStack.API.Controllers
         }
 
         [HttpGet("allroles", Name = "Get All Roles")]
-        public async Task<List<string>?> GetAllRoles()
+        public async Task<IActionResult> GetAllRoles()
         {
-            return await _roles.Roles.Select(x => x.Name ?? string.Empty)?.Where(x => !string.IsNullOrEmpty(x))?.ToListAsync();
+            try
+            {
+                return Ok(await _roles.Roles.Select(x => x.Name ?? string.Empty)?.Where(x => !string.IsNullOrEmpty(x))?.ToListAsync());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new List<string>() { ex.Message });
+            }
         }
 
         [HttpPost("change-password/{id}", Name = "Change Password")]
@@ -84,7 +91,7 @@ namespace BlazorStack.API.Controllers
             return result.Succeeded;
         }
 
-        [HttpGet("{Id}",Name = "User")]
+        [HttpGet("{Id}", Name = "User")]
         public async Task<UserDetailsViewModel?> GetUser([FromRoute] string Id)
         {
             var user = await _db.Users.FindAsync(Id);
@@ -95,8 +102,8 @@ namespace BlazorStack.API.Controllers
                 Email = user?.Email ?? string.Empty,
                 FirstName = string.Empty,
                 LastName = string.Empty,
-                PhotoUrl= string.Empty,
-                Role =  roleName,
+                PhotoUrl = string.Empty,
+                Role = roleName,
             };
             return userDetailsViewModel;
         }

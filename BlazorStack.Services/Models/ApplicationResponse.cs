@@ -11,5 +11,6 @@ namespace BlazorStack.Services.Models
         public int StatusCode { get; set; }
         public List<string>? Errors { get; set; }
         public T? Data { get; set; }
+        public bool IsSuccess { get => StatusCode >= 200 && StatusCode <= 299; } 
     }
 }

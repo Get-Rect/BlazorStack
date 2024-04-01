@@ -60,7 +60,7 @@
     </ChildContent>
 </Modal>
 
-<Modal Title="Delete User" @bind-IsVisible="showDeleteModal" OnSubmit="@(() => DeleteUser(UserToDelete))">
+<Modal Title="Delete User" @bind-IsVisible="showDeleteModal" OnSubmit="DeleteUser">
     <ChildContent>
         <span>Are you sure you want to delete @(UserToDelete?.Email ?? "Something went wrong.")?</span>
     </ChildContent>
@@ -130,19 +130,23 @@
         showDeleteModal = true;
     }
 
-    private async Task DeleteUser(UserViewModel? user)
+    private async Task DeleteUser()
     {
-        UserToDelete = null;
-        showDeleteModal = false;
-
-        if(user is null)
+        if(UserToDelete is null)
         {
-            // show notification 
+            _notifications.ShowNotification("User is null", Models.NotificationType.Error);
+            return;
         }
+
+        var response = await _api.DeleteUser(UserToDelete.Id);
+        if (!response?.IsSuccess == true) _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to delete user." });
         else
         {
-            // make an api call to delete the user
+            _notifications.ShowNotification("Successfully deleted user.", Models.NotificationType.Success);
+            await RefreshUsers();
         }
+        UserToDelete = null;
+        showDeleteModal = false;
     }
 
     private async Task HandleSubmit()

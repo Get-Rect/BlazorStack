@@ -92,6 +92,16 @@ namespace BlazorStack.API.Controllers
             else return Ok(true);
         }
 
+        [HttpDelete("{id}", Name = "Delete User")]
+        public async Task<IActionResult> DeleteUser([FromRoute] string id)
+        {
+            var user = await _users.FindByIdAsync(id);
+            if (user is null) return BadRequest(new List<string>() { "User not found." });
+            var result = await _users.DeleteAsync(user);
+            if (result.Errors.Any()) return BadRequest(result.Errors.Select(x => x.Description).ToList());
+            else return Ok(true);
+        }
+
         [HttpGet("{Id}", Name = "User")]
         public async Task<UserDetailsViewModel?> GetUser([FromRoute] string Id)
         {

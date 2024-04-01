@@ -106,6 +106,13 @@ namespace BlazorStack.Services
         public async Task<ApplicationResponse<bool?>?> ChangePassword(string id, string newPassword)
         {
             var response = await _http.PostAsJsonAsync($"users/change-password/{id}", new ChangePasswordRequest { newPassword = newPassword });
+            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
+            return content;
+        }
+
+        public async Task<ApplicationResponse<bool?>?> DeleteUser(string id)
+        {
+            var response = await _http.DeleteAsync($"users/{id}");
             var test = await response.Content.ReadAsStringAsync();
             var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
             return content;

@@ -1,4 +1,6 @@
-﻿using BlazorStack.Services;
+﻿using Blazored.LocalStorage;
+using BlazorStack.Portal.Services;
+using BlazorStack.Services;
 using BlazorStack.Services.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http;
@@ -44,7 +46,10 @@ namespace BlazorStack.Portal.Auth
                 }
             }
             var id = new ClaimsIdentity(claims, nameof(TokenAuthenticationStateProvider));
-            return new AuthenticationState(new ClaimsPrincipal(id));
+            var user = new AuthenticationState(new ClaimsPrincipal(id));
+            //NotifyAuthenticationStateChanged(user);
+            // you need to implement your login methods here so you can call NotifyAuthenticationStateChanged with using .result.
+            return user;
         }
     }
 }

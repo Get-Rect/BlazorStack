@@ -22,7 +22,11 @@ builder.Services.AddHttpClient<ApplicationAPIService>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["BackendUrl"] ?? throw new Exception("Backend url is not configured."));
 }).AddHttpMessageHandler<ApplicationTokenHandler>();
+builder.Services.AddHttpClient<TokenService>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["BackendUrl"] ?? throw new Exception("Backend url is not configured."));
+});
 
-builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredLocalStorageAsSingleton();
 
 await builder.Build().RunAsync();

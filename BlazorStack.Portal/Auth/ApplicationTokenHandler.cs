@@ -1,26 +1,27 @@
 ﻿using Blazored.LocalStorage;
+using BlazorStack.Portal.Services;
 
 namespace BlazorStack.Portal.Auth
 {
     public class ApplicationTokenHandler : DelegatingHandler
     {
-        ILocalStorageService _localStorage;
+        private readonly ILocalStorageService _localStorage;
+        private readonly TokenService _tokens;
 
-        public ApplicationTokenHandler(ILocalStorageService localStorage)
+        public ApplicationTokenHandler(ILocalStorageService localStorage, TokenService tokens)
         {
             _localStorage = localStorage;
+            _tokens = tokens;
         }
 
         protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            string token = await GetTokenFromLocalStorage();
-            if (!string.IsNullOrEmpty(token)) request.Headers.Add("Authorization", $"Bearer {token}");
+            var authResponse = await _tokens.GetToken();
+            if (authResponse is not null)
+            {
+                request.Headers.Add("Authorization", $"Bearer {authResponse.AccessToken}");
+            }
             return await base.SendAsync(request, cancellationToken);
-        }
-
-        private async Task<string> GetTokenFromLocalStorage()
-        {
-            return await _localStorage.GetItemAsStringAsync("token") ?? string.Empty;
         }
     }
 }

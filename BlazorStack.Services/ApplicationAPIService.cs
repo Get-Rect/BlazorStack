@@ -26,7 +26,17 @@ namespace BlazorStack.Services
                     email,
                     password
                 });
-            var test = await result.Content.ReadAsStringAsync();
+            var response = await result.Content.ReadFromJsonAsync<ApplicationResponse<LoginResponse>>();
+            return response;
+        }
+
+        public async Task<ApplicationResponse<LoginResponse>?> RefreshToken(string refreshToken)
+        {
+            var result = await _http.PostAsJsonAsync(
+                "refresh", new
+                {
+                    refreshToken
+                });
             var response = await result.Content.ReadFromJsonAsync<ApplicationResponse<LoginResponse>>();
             return response;
         }

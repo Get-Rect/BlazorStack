@@ -74,9 +74,10 @@
         }
 
         var loginResponse = await _api.Login(email, password);
-        if (loginResponse?.IsSuccess == true)
+        if (loginResponse?.IsSuccess == true && loginResponse.Data is not null)
         {
-            await _localStorage.SetItemAsStringAsync("token", loginResponse?.Data?.AccessToken ?? string.Empty);
+            loginResponse.Data.Issued = DateTime.UtcNow;
+            await _localStorage.SetItemAsync("token", loginResponse?.Data);
             _nav.NavigateTo(_nav.BaseUri, true);
         }
         else

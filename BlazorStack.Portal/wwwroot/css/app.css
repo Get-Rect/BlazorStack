@@ -387,6 +387,7 @@ select.rounded {
 
 button {
     background-color: var(--primary);
+    border: 1px solid var(--primary);
     color: white;
     padding: 10px 20px;
     border: none;
@@ -402,6 +403,7 @@ button {
 
     button.green {
         background-color: var(--green);
+        border: 1px solid var(--green);
     }
 
     button:hover {
@@ -419,6 +421,7 @@ button {
 body {
     background-color: var(--background);
     margin: 0 !important;
+    font-family: 'Roboto', sans-serif;
 }
 
 
@@ -441,7 +444,7 @@ body {
     .sidebar.collapsed {
         width: 4rem;
         overflow: hidden;
-        padding: 1rem;
+        padding: 3rem 1rem 1rem 1rem;
     }
 
 .nav-menu {

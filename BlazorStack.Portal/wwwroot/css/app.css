@@ -99,8 +99,18 @@
     gap: 0.5rem;
 }
 
-.left-half {
+.login-logo {
+    height: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-logo img {
     height: 100%;
+}
+
+.left-half {
     width: 50%;
     padding: 2rem;
 }

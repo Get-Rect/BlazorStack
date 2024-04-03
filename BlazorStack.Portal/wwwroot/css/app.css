@@ -640,3 +640,31 @@ code {
 .error {
     background-color: red;
 }
+
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Adjust the height as needed */
+    min-height: 200px;
+    min-width: 200px;
+}
+
+.loading-spinner {
+    border: 5px solid rgba(255, 255, 255, 0.3); /* Light grey border */
+    border-top: 5px solid var(--primary); /* Blue border for the top side */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

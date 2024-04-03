@@ -15,8 +15,8 @@
 </div>
 
 @code {
-    private void ShowSuccess()
+    private async Task ShowSuccess()
     {
-        NotificationService.ShowNotification("Operation successful!", NotificationType.Success);
+        await NotificationService.ShowNotification("Operation successful!", NotificationType.Success);
     }
 }

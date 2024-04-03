@@ -14,7 +14,7 @@ namespace BlazorStack.Portal.Services
 
         public event Action OnChange;
 
-        public async void ShowNotification(string message, NotificationType type)
+        public async Task ShowNotification(string message, NotificationType type)
         {
             var notificationMessage = new NotificationMessage { Message = message, Type = type };
             _messages.Insert(0, notificationMessage);
@@ -31,12 +31,14 @@ namespace BlazorStack.Portal.Services
             NotifyStateChanged();
         }
 
+        public async Task ShowError(string message) => await ShowNotification(message, NotificationType.Error);
 
-        public void ShowErrorNotifications(List<string> errors)
+
+        public async Task ShowErrorNotifications(List<string> errors)
         {
             foreach (var error in errors)
             {
-                ShowNotification(error, NotificationType.Error);
+                await ShowNotification(error, NotificationType.Error);
             }
         }
 

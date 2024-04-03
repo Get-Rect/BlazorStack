@@ -1,4 +1,5 @@
 ﻿@using BlazorStack.Portal.Auth
+@using BlazorStack.Portal.Services
 @using BlazorStack.Services
 @using Blazored.LocalStorage
 @using Microsoft.AspNetCore.Authorization
@@ -9,6 +10,7 @@
 @inject NavigationManager _nav;
 @inject ILocalStorageService _localStorage
 @inject AuthenticationStateProvider _authState;
+@inject IAccountManagement _account;
 @attribute [Authorize]
 
 @code {
@@ -17,7 +19,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await _localStorage.RemoveItemAsync("token");
-        _nav.NavigateTo("/", forceLoad: true);
+        await _account.Logout();
+        StateHasChanged();
     }
 }

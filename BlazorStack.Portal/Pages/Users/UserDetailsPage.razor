@@ -96,7 +96,7 @@
         }
         else
         {
-            _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to process response." });
+            await _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to process response." });
         }
     }
 
@@ -109,17 +109,17 @@
         }
         else
         {
-            _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to process response." });
+            await _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to process response." });
         }
     }
 
     private async Task HandleRoleSubmit()
     {
         var response = await _api.UpdateRole(Id, newRole);
-        if (!response?.IsSuccess == true) _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to update role." });
+        if (!response?.IsSuccess == true) await _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to update role." });
         else
         {
-            _notifications.ShowNotification("Successfully updated role", Models.NotificationType.Success);
+            await _notifications.ShowNotification("Successfully updated role", Models.NotificationType.Success);
             ToggleRoleModal();
         }
         await RefreshUser();
@@ -128,10 +128,10 @@
     private async Task HandlePasswordSubmit()
     {
         var response = await _api.ChangePassword(Id, newPassword);
-        if (!response?.IsSuccess == true) _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to update password." });
+        if (!response?.IsSuccess == true) await _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to update password." });
         else
         {
-            _notifications.ShowNotification("Successfully updated password", Models.NotificationType.Success);
+            await _notifications.ShowNotification("Successfully updated password", Models.NotificationType.Success);
             TogglePasswordModal();
         }
     }

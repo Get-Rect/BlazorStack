@@ -64,7 +64,7 @@
     <ChildContent>
         <span>Are you sure you want to delete @(UserToDelete?.Email ?? "Something went wrong.")?</span>
     </ChildContent>
-    </Modal>
+</Modal>
 
 @code {
     private UserViewModel newUser = new UserViewModel();
@@ -94,7 +94,7 @@
         }
         else
         {
-            _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to process response." });
+            await _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to process response." });
         }
     }
 
@@ -107,7 +107,7 @@
         }
         else
         {
-            _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to process response." });
+            await _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to process response." });
         }
     }
 
@@ -132,17 +132,17 @@
 
     private async Task DeleteUser()
     {
-        if(UserToDelete is null)
+        if (UserToDelete is null)
         {
-            _notifications.ShowNotification("User is null", Models.NotificationType.Error);
+            await _notifications.ShowNotification("User is null", Models.NotificationType.Error);
             return;
         }
 
         var response = await _api.DeleteUser(UserToDelete.Id);
-        if (!response?.IsSuccess == true) _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to delete user." });
+        if (!response?.IsSuccess == true) await _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to delete user." });
         else
         {
-            _notifications.ShowNotification("Successfully deleted user.", Models.NotificationType.Success);
+            await _notifications.ShowNotification("Successfully deleted user.", Models.NotificationType.Success);
             await RefreshUsers();
         }
         UserToDelete = null;
@@ -151,9 +151,16 @@
 
     private async Task HandleSubmit()
     {
-        await _api.CreateUser(newUser);
-        ToggleModal();
-        await RefreshUsers();
+        var response = await _api.CreateUser(newUser);
+        if (!response?.IsSuccess == true)
+        {
+            await _notifications.ShowErrorNotifications(response.Errors);
+        }
+        else
+        {
+            ToggleModal();
+            await RefreshUsers();
+        }
     }
 
     private void ToggleModal()

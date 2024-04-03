@@ -10,6 +10,7 @@
 @inject ILocalStorageService _localStorage;
 @inject NavigationManager _nav;
 @inject AuthenticationStateProvider _state;
+@inject IAccountManagement _account;
 @inject NotificationService _notifications;
 
 
@@ -42,16 +43,6 @@
     private string password = string.Empty;
     private string[] errorList;
 
-    protected async override Task OnInitializedAsync()
-    {
-        // var currentState = await _state.GetAuthenticationStateAsync();
-        // var isLoggedIn = currentState.User.Identity?.IsAuthenticated == true;
-        // if (isLoggedIn)
-        // {
-        //     _nav.NavigateTo(_nav.BaseUri);
-        // }
-    }
-
     public async Task DoLoginAsync()
     {
         success = errors = false;
@@ -73,16 +64,14 @@
             return;
         }
 
-        var loginResponse = await _api.Login(email, password);
-        if (loginResponse?.IsSuccess == true && loginResponse.Data is not null)
+        string error = await _account.Login(email, password);
+        if (string.IsNullOrEmpty(error))
         {
-            loginResponse.Data.Issued = DateTime.UtcNow;
-            await _localStorage.SetItemAsync("token", loginResponse?.Data);
-            _nav.NavigateTo(_nav.BaseUri, true);
+            _nav.NavigateTo(_nav.BaseUri);
         }
         else
         {
-            _notifications.ShowNotification("Failed to login", Models.NotificationType.Error);
+            await _notifications.ShowNotification(error, Models.NotificationType.Error);
         }
     }
 }

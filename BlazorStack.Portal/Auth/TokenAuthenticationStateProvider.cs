@@ -3,19 +3,47 @@ using BlazorStack.Portal.Services;
 using BlazorStack.Services;
 using BlazorStack.Services.Models;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
+using static System.Net.WebRequestMethods;
 
 namespace BlazorStack.Portal.Auth
 {
-    public class TokenAuthenticationStateProvider : AuthenticationStateProvider
+    public class TokenAuthenticationStateProvider : AuthenticationStateProvider, IAccountManagement
     {
         private readonly ApplicationAPIService _api;
+        private readonly ILocalStorageService _localStorage;
 
-        public TokenAuthenticationStateProvider(ApplicationAPIService api)
+        public TokenAuthenticationStateProvider(ApplicationAPIService api, ILocalStorageService localStorage)
         {
             _api = api;
+            _localStorage = localStorage;
+        }
+
+        public async Task<string> Login(string email, string password)
+        {
+            string error = string.Empty;
+            var loginResponse = await _api.Login(email, password);
+            if (loginResponse?.IsSuccess == true && loginResponse.Data is not null)
+            {
+                loginResponse.Data.Issued = DateTime.UtcNow;
+                await _localStorage.SetItemAsync("token", loginResponse?.Data);
+                NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+            }
+            else
+            {
+                error = "Login failed.";
+            }
+            return error;
+        }
+
+        public async Task Logout()
+        {
+            await _localStorage.RemoveItemAsync("token");
+            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -47,9 +75,19 @@ namespace BlazorStack.Portal.Auth
             }
             var id = new ClaimsIdentity(claims, nameof(TokenAuthenticationStateProvider));
             var user = new AuthenticationState(new ClaimsPrincipal(id));
-            //NotifyAuthenticationStateChanged(user);
-            // you need to implement your login methods here so you can call NotifyAuthenticationStateChanged with using .result.
             return user;
         }
+
+        public async Task<List<string>> Register(string email, string password)
+        {
+            var response = await _api.CreateUser(new UserViewModel() { Email = email, Password = password });
+            return response?.Errors ?? new List<string>();
+        }
+
+        //public async Task<AuthenticationState> CheckAuthenticatedAsync()
+        //{
+        //    var state = await GetAuthenticationStateAsync();
+        //    return state;
+        //}
     }
 }

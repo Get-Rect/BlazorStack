@@ -41,11 +41,11 @@ namespace BlazorStack.Services
             return response;
         }
 
-        //public async Task<bool> Logout()
-        //{
-        //    var result = await _http.PostAsJsonAsync("account/logout", new { });
-        //    return result.IsSuccessStatusCode;
-        //}
+        public async Task<bool> Logout()
+        {
+            var result = await _http.PostAsJsonAsync("account/logout", new { });
+            return result.IsSuccessStatusCode;
+        }
 
         public async Task<ApplicationResponse<List<string>>?> GetAllRoles()
         {
@@ -54,17 +54,11 @@ namespace BlazorStack.Services
             return content;
         }
 
-        public async Task<bool> CreateUser(UserViewModel newUser)
+        public async Task<ApplicationResponse<bool>?> CreateUser(UserViewModel newUser)
         {
-            try
-            {
-                var result = await _http.PostAsJsonAsync("users", newUser);
-                return result.IsSuccessStatusCode;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            var response = await _http.PostAsJsonAsync("users", newUser);
+            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool>>();
+            return content;
         }
 
         public async Task<UserInfo?> GetUserInfo()

@@ -11,13 +11,14 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddTransient<ApplicationTokenHandler>();
+
 builder.Services.AddAuthorizationCore();
 
-builder.Services.AddSingleton<AuthenticationStateProvider, TokenAuthenticationStateProvider>();
-builder.Services.AddSingleton<NotificationService>();
+builder.Services.AddScoped<AuthenticationStateProvider, TokenAuthenticationStateProvider>();
 
+builder.Services.AddScoped(sp => (IAccountManagement)sp.GetRequiredService<AuthenticationStateProvider>());
 
-builder.Services.AddTransient<ApplicationTokenHandler>();
 builder.Services.AddHttpClient<ApplicationAPIService>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["BackendUrl"] ?? throw new Exception("Backend url is not configured."));
@@ -28,5 +29,7 @@ builder.Services.AddHttpClient<TokenService>(client =>
 });
 
 builder.Services.AddBlazoredLocalStorageAsSingleton();
+
+builder.Services.AddSingleton<NotificationService>();
 
 await builder.Build().RunAsync();

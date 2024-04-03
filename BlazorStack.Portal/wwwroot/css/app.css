@@ -90,12 +90,34 @@
 
 .login-card {
     background-color: white;
-    padding: 2rem;
     border-radius: 0.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px; /* Adjust based on your preference */
+    max-width: 800px;
+    height: 400px;
+    display: flex;
+    gap: 0.5rem;
 }
+
+.left-half {
+    height: 100%;
+    width: 50%;
+    padding: 2rem;
+}
+
+.right-half {
+    height: 100%;
+    width: 50%;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+    .right-half img {
+        width: 100%;
+        height: 100%;
+        border-top-right-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+    }
 
 .form-group {
     margin-bottom: 1rem;

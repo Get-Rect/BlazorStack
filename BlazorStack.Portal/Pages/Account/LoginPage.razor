@@ -15,25 +15,28 @@
 
 
 <div class="login-card">
-    <PageTitle>Login</PageTitle>
-    @if (errors)
-    {
-        @foreach (var error in errorList)
+    <div class="left-half">
+        @if (errors)
         {
-            <div class="alert alert-danger">@error</div>
+            @foreach (var error in errorList)
+            {
+                <div class="alert alert-danger">@error</div>
+            }
         }
-    }
-
-    <div class="flex-outer">
-        <div class="form-group">
-            <input class="form-field" required id="email" name="emailInput" placeholder="Email" type="email" @bind-value="email" />
+        <div class="flex-outer">
+            <div class="form-group">
+                <input class="form-field" required id="email" name="emailInput" placeholder="Email" type="email" @bind-value="email" />
+            </div>
+            <div class="form-group">
+                <input class="form-field" required id="password" name="passwordInput" placeholder="Password" type="password" @bind-value="password" />
+            </div>
+            <div>
+                <button class="btn btn-primary" @onclick="DoLoginAsync">Login</button>
+            </div>
         </div>
-        <div class="form-group">
-            <input class="form-field" required id="password" name="passwordInput" placeholder="Password" type="password" @bind-value="password" />
-        </div>
-        <div>
-            <button class="btn btn-primary" @onclick="DoLoginAsync">Login</button>
-        </div>
+    </div>
+    <div class="right-half">
+        <img src="/img/login-background.png" />
     </div>
 </div>
 

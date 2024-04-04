@@ -14,7 +14,7 @@ namespace BlazorStack.Portal.Services
 
         public event Action OnChange;
 
-        public async Task ShowNotification(string message, NotificationType type)
+        public void ShowNotification(string message, NotificationType type)
         {
             var notificationMessage = new NotificationMessage { Message = message, Type = type };
             _messages.Insert(0, notificationMessage);
@@ -25,20 +25,16 @@ namespace BlazorStack.Portal.Services
             }
 
             NotifyStateChanged();
-
-            await Task.Delay(10000); // Wait for 10 seconds
-            _messages.Remove(notificationMessage);
-            NotifyStateChanged();
         }
 
-        public async Task ShowError(string message) => await ShowNotification(message, NotificationType.Error);
+        public void ShowError(string message) => ShowNotification(message, NotificationType.Error);
 
 
-        public async Task ShowErrorNotifications(List<string> errors)
+        public void ShowErrorNotifications(List<string> errors)
         {
             foreach (var error in errors)
             {
-                await ShowNotification(error, NotificationType.Error);
+                ShowNotification(error, NotificationType.Error);
             }
         }
 

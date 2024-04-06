@@ -11,7 +11,7 @@
 @attribute [Authorize]
 
 <div class="scrollable-card">
-    @if (userDetails == null)
+    @if (userDetails == null || isBusy)
     {
         <LoadingSpinner />
     }
@@ -78,6 +78,7 @@
     private bool viewingUserIsAdmin = false;
     private bool showRoleModal = false;
     private bool showPasswordModal = false;
+    private bool isBusy = false;
     private string newRole = string.Empty;
     private string newPassword = string.Empty;
 
@@ -159,6 +160,7 @@
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
+        isBusy = true;
         var file = e.File;
         if (file != null)
         {
@@ -183,6 +185,7 @@
                 }
             }
         }
+        isBusy = false;
     }
 
     private void AdminUploadPhoto()

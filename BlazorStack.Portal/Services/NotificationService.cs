@@ -9,6 +9,7 @@ namespace BlazorStack.Portal.Services
     public class NotificationService
     {
         private readonly List<NotificationMessage> _messages = new();
+        private readonly Dictionary<NotificationMessage, Timer> _messageTimers = new();
 
         public IReadOnlyList<NotificationMessage> Messages => _messages.AsReadOnly();
 
@@ -21,8 +22,12 @@ namespace BlazorStack.Portal.Services
 
             if (_messages.Count > 5)
             {
+                var messageToRemove = _messages[5];
                 _messages.RemoveAt(5);
+                RemoveMessageTimer(messageToRemove);
             }
+
+            var timer = new Timer(RemoveMessageCallback, notificationMessage, TimeSpan.FromSeconds(10), Timeout.InfiniteTimeSpan);
 
             NotifyStateChanged();
         }
@@ -36,6 +41,24 @@ namespace BlazorStack.Portal.Services
             {
                 ShowNotification(error, NotificationType.Error);
             }
+        }
+
+        private void RemoveMessageTimer(NotificationMessage message)
+        {
+            if (_messageTimers.TryGetValue(message, out var timer))
+            {
+                _messageTimers.Remove(message);
+                timer.Dispose();
+            }
+        }
+
+        private void RemoveMessageCallback(object? state)
+        {
+            if (state is null) return;
+            var message = (NotificationMessage)state;
+            _messages.Remove(message);
+            RemoveMessageTimer(message);
+            NotifyStateChanged();
         }
 
         private void NotifyStateChanged() => OnChange?.Invoke();

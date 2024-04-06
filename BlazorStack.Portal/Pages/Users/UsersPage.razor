@@ -1,5 +1,6 @@
 ﻿@using BlazorStack.Portal.Services
 @using BlazorStack.Services
+@using BlazorStack.Services.Extensions
 @using BlazorStack.Services.Models
 @using BlazorStack.Portal.Components
 @using Microsoft.AspNetCore.Authorization
@@ -32,7 +33,7 @@
             {
                 <div class="user-card">
                     <div class="profile-photo w-50">
-                        <img src="@(!string.IsNullOrEmpty(user.PhotoUrl) ? user.PhotoUrl : "/img/defaultUserPhoto.png")" />
+                        <img src="@(!string.IsNullOrEmpty(user.PhotoUrl) ? user.PhotoUrl.AddTimestampQueryString() : "/img/defaultUserPhoto.png")" />
                     </div>
                     <div class="w-200 hide-overflow">@user.Email</div>
                     <div class="w-100">@user.Role</div>
@@ -158,10 +159,11 @@
         var response = await _api.CreateUser(newUser);
         if (!response?.IsSuccess == true)
         {
-            _notifications.ShowErrorNotifications(response.Errors);
+            _notifications.ShowErrorNotifications(response?.Errors ?? new() { "An unknown error occurred while creating the user." });
         }
         else
         {
+            _notifications.ShowSuccess("User created successfully.");
             ToggleModal();
             await RefreshUsers();
         }

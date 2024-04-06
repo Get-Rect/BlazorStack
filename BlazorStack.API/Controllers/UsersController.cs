@@ -31,17 +31,18 @@ namespace BlazorStack.API.Controllers
         }
 
         [HttpGet(Name = "Users")]
-        public async Task<List<UserViewModel>> GetUsers(string search = "")
+        public async Task<IActionResult> GetUsers(string search = "")
         {
             var users = _db.Users.AsQueryable();
             var userRoles = _db.UserRoles.ToList();
             var roles = _db.Roles.ToList();
+
             var userViewModels = await users.OrderByDescending(x => x.Email).Select(x => ToUserViewModel(x)).ToListAsync();
             foreach (var user in userViewModels)
             {
                 user.Role = roles.FirstOrDefault(x => x.Id == userRoles.FirstOrDefault(y => y.UserId == user.Id)?.RoleId)?.Name ?? string.Empty;
             }
-            return userViewModels;
+            return Ok(userViewModels);
         }
 
         [HttpPost(Name = "Create User")]
@@ -67,7 +68,7 @@ namespace BlazorStack.API.Controllers
                 return BadRequest(roleResult.Errors.Select(x => x.Description));
             }
 
-            return Created();
+            return Ok(true);
         }
 
         [HttpGet("allroles", Name = "Get All Roles")]
@@ -164,7 +165,7 @@ namespace BlazorStack.API.Controllers
                 var updateUserResponse = await _users.UpdateAsync(user);
                 if (!updateUserResponse.Succeeded) return BadRequest(updateUserResponse.Errors.Select(x => x.Description));
                 //TODO: Update logic to delete photo if updating user fails.
-                return Ok(new { uri });
+                return Ok(new PhotoUploadResponse() { Uri = uri });
             }
         }
 

@@ -375,6 +375,20 @@ select.rounded {
     position: relative;
 }
 
+.icon-field .inner {
+    width: 100%;
+    display: flex;
+    gap: 0.5rem;
+    overflow: hidden;
+    white-space: nowrap;
+    align-items: center;
+}
+
+    .icon-field .inner span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
 .user-photo input[type="file"] {
     position: absolute;
     top: 0;

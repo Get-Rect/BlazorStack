@@ -36,6 +36,13 @@ namespace BlazorStack.Services
                 if (await containerClient.ExistsAsync() == false) await containerClient.CreateAsync();
 
                 var blobClient = containerClient.GetBlobClient(fileName);
+
+                if (await blobClient.ExistsAsync())
+                {
+                    var deleteResponse = await blobClient.DeleteAsync();
+                    if (deleteResponse.IsError) return string.Empty;
+                }
+
                 var response = await blobClient.UploadAsync(content);
                 var success = response.GetRawResponse().Status == 201;
                 return success ? blobClient.Uri.ToString() : string.Empty;

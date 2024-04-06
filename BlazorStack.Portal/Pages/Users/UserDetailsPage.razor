@@ -1,5 +1,6 @@
 ﻿@using BlazorStack.Portal.Services
 @using BlazorStack.Services
+@using BlazorStack.Services.Extensions
 @using BlazorStack.Services.Models
 @using BlazorStack.Portal.Components
 @using Microsoft.AspNetCore.Authorization
@@ -18,14 +19,16 @@
     {
         <div class="row">
             <div class="user-photo" @onclick="AdminUploadPhoto">
-                <img src="@(!string.IsNullOrEmpty(userDetails.PhotoUrl) ? @userDetails.PhotoUrl : "/img/defaultUserPhoto.png")" alt="User Photo">
+                <img src="@(!string.IsNullOrEmpty(userDetails.PhotoUrl) ? userDetails.PhotoUrl.AddTimestampQueryString() : "/img/defaultUserPhoto.png")" alt="User Photo">
                 <InputFile type="file" OnChange="@(async (InputFileChangeEventArgs args) => await HandleFileSelected(args))" />
             </div>
             <div class="user-details">
                 <div class="user-detail">
                     <div class="icon-field w-200">
-                        <i class="text-primary fa-solid fa-envelope"></i>
-                        @userDetails.Email
+                        <div class="inner">
+                            <i class="text-primary fa-solid fa-envelope"></i>
+                            <span>@userDetails.Email</span>
+                        </div>
                     </div>
                 </div>
                 <div class="user-detail">
@@ -99,6 +102,7 @@
         {
             _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to process response." });
         }
+        StateHasChanged();
     }
 
     private async Task RefreshRoles()

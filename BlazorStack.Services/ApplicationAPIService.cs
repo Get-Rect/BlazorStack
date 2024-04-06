@@ -55,10 +55,10 @@ namespace BlazorStack.Services
             return content;
         }
 
-        public async Task<ApplicationResponse<bool>?> CreateUser(UserViewModel newUser)
+        public async Task<ApplicationResponse<bool?>?> CreateUser(UserViewModel newUser)
         {
             var response = await _http.PostAsJsonAsync("users", newUser);
-            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool>>();
+            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
             return content;
         }
 
@@ -129,10 +129,10 @@ namespace BlazorStack.Services
             return content;
         }
 
-        public async Task<ApplicationResponse<string>?> UploadProfilePhoto(string userId, string base64)
+        public async Task<ApplicationResponse<PhotoUploadResponse>?> UploadProfilePhoto(string userId, string base64)
         {
             var response = await _http.PostAsJsonAsync($"users/{userId}/upload-profile-photo", new UploadRequest { Base64 = base64 });
-            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<string>>();
+            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<PhotoUploadResponse>>();
             return content;
         }
     }

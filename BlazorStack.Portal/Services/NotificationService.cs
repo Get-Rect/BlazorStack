@@ -33,6 +33,7 @@ namespace BlazorStack.Portal.Services
         }
 
         public void ShowError(string message) => ShowNotification(message, NotificationType.Error);
+        public void ShowSuccess(string message) => ShowNotification(message, NotificationType.Success);
 
 
         public void ShowErrorNotifications(List<string> errors)

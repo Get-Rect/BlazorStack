@@ -371,6 +371,20 @@ select.rounded {
     margin-top: 20px;
 }
 
+.user-photo {
+    position: relative;
+}
+
+.user-photo input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
 .user-photo img {
     width: 100px;
     height: 100px;

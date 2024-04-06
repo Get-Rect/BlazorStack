@@ -18,7 +18,8 @@
     {
         <div class="row">
             <div class="user-photo" @onclick="AdminUploadPhoto">
-                <img src="@(!string.IsNullOrEmpty(userDetails.PhotoUrl) ? @userDetails.PhotoUrl : "/img/defaultUserPhoto.png")" alt="User Photo" />
+                <img src="@(!string.IsNullOrEmpty(userDetails.PhotoUrl) ? @userDetails.PhotoUrl : "/img/defaultUserPhoto.png")" alt="User Photo">
+                <InputFile type="file" OnChange="@(async (InputFileChangeEventArgs args) => await HandleFileSelected(args))" />
             </div>
             <div class="user-details">
                 <div class="user-detail">
@@ -151,6 +152,32 @@
     private bool CheckIsAdmin()
     {
         return true;
+    }
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            using (var stream = file.OpenReadStream())
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memoryStream);
+                    var base64 = Convert.ToBase64String(memoryStream.ToArray());
+                    var result = await _api.UploadProfilePhoto(Id, base64);
+                    if (result?.IsSuccess == true)
+                    {
+                        _notifications.ShowSuccess("Photo uploaded successfully.");
+                        await RefreshUser();
+                    }
+                    else
+                    {
+                        _notifications.ShowErrorNotifications(result?.Errors ?? new List<string>() { "Unknown error occurred while uploading photo." });
+                    }
+                }
+            }
+        }
     }
 
     private void AdminUploadPhoto()

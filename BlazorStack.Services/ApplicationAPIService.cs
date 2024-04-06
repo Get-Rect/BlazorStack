@@ -1,4 +1,5 @@
 ﻿using BlazorStack.Services.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -124,8 +125,14 @@ namespace BlazorStack.Services
         public async Task<ApplicationResponse<bool?>?> DeleteUser(string id)
         {
             var response = await _http.DeleteAsync($"users/{id}");
-            var test = await response.Content.ReadAsStringAsync();
             var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
+            return content;
+        }
+
+        public async Task<ApplicationResponse<string>?> UploadProfilePhoto(string userId, string base64)
+        {
+            var response = await _http.PostAsJsonAsync($"users/{userId}/upload-profile-photo", new UploadRequest { Base64 = base64 });
+            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<string>>();
             return content;
         }
     }

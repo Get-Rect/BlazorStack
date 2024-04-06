@@ -6,6 +6,7 @@ using BlazorStack.Services.Models;
 using BlazorStack.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using BlazorStack.Services;
 
 namespace BlazorStack.API.Controllers
 {
@@ -17,14 +18,16 @@ namespace BlazorStack.API.Controllers
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _users;
         private readonly RoleManager<IdentityRole> _roles;
+        private readonly BlobService _blobs;
         private readonly ILogger<UsersController> _logger;
 
-        public UsersController(ILogger<UsersController> logger, ApplicationDbContext db, UserManager<ApplicationUser> users, RoleManager<IdentityRole> roles)
+        public UsersController(ILogger<UsersController> logger, ApplicationDbContext db, UserManager<ApplicationUser> users, RoleManager<IdentityRole> roles, BlobService blobs)
         {
             _logger = logger;
             _db = db;
             _users = users;
             _roles = roles;
+            _blobs = blobs;
         }
 
         [HttpGet(Name = "Users")]
@@ -101,7 +104,7 @@ namespace BlazorStack.API.Controllers
             if (userRoles.Any())
             {
                 var removeRolesResult = await _users.RemoveFromRolesAsync(user, userRoles);
-                if(!removeRolesResult.Succeeded) return BadRequest(removeRolesResult.Errors.Select(x => x.Description).ToList());
+                if (!removeRolesResult.Succeeded) return BadRequest(removeRolesResult.Errors.Select(x => x.Description).ToList());
             }
 
             var newRoleName = request.NewRole;
@@ -126,9 +129,11 @@ namespace BlazorStack.API.Controllers
         }
 
         [HttpGet("{Id}", Name = "User")]
-        public async Task<UserDetailsViewModel?> GetUser([FromRoute] string Id)
+        public async Task<IActionResult> GetUser([FromRoute] string Id)
         {
             var user = await _db.Users.FindAsync(Id);
+            if (user is null) return BadRequest(new List<string>() { "Failed to find user." });
+
             var roleId = (await _db.UserRoles.FirstOrDefaultAsync(x => x.UserId == Id))?.RoleId ?? string.Empty;
             var roleName = (await _db.Roles.FirstOrDefaultAsync(x => x.Id == roleId))?.Name ?? string.Empty;
             var userDetailsViewModel = new UserDetailsViewModel()
@@ -136,10 +141,31 @@ namespace BlazorStack.API.Controllers
                 Email = user?.Email ?? string.Empty,
                 FirstName = string.Empty,
                 LastName = string.Empty,
-                PhotoUrl = string.Empty,
+                PhotoUrl = user?.PhotoUrl ?? string.Empty,
                 Role = roleName,
             };
-            return userDetailsViewModel;
+            return Ok(userDetailsViewModel);
+        }
+
+        [HttpPost("{userId}/upload-profile-photo")]
+        public async Task<IActionResult> UploadProfilePhoto([FromRoute] string userId, [FromBody] UploadRequest request)
+        {
+            var user = await _users.FindByIdAsync(userId);
+            if (user is null) return BadRequest(new List<string>() { "User not found." });
+
+            if (string.IsNullOrEmpty(request.Base64)) return BadRequest(new List<string>() { "Profile photo was empty or missing." });
+
+            var bytes = Convert.FromBase64String(request.Base64);
+            using (var memoryStream = new MemoryStream(bytes))
+            {
+                var uri = await _blobs.UploadProfilePhoto(userId, memoryStream);
+                if (string.IsNullOrEmpty(uri)) return BadRequest(new List<string>() { "Failed to upload profile photo." });
+                user.PhotoUrl = uri;
+                var updateUserResponse = await _users.UpdateAsync(user);
+                if (!updateUserResponse.Succeeded) return BadRequest(updateUserResponse.Errors.Select(x => x.Description));
+                //TODO: Update logic to delete photo if updating user fails.
+                return Ok(new { uri });
+            }
         }
 
         private static UserViewModel ToUserViewModel(ApplicationUser user)

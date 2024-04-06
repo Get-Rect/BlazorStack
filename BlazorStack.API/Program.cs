@@ -2,6 +2,8 @@ using BlazorStack.API.Middleware;
 using BlazorStack.Data;
 using BlazorStack.Data.Contexts;
 using BlazorStack.Data.Models;
+using BlazorStack.Services;
+using BlazorStack.Services.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,6 +18,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=blazorstack.db"));
+builder.Services.Configure<StorageAccountSettings>(builder.Configuration.GetSection("StorageAccount"));
+builder.Services.AddTransient<BlobService>();
+
 builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
 builder.Services.AddAuthorizationBuilder();
 

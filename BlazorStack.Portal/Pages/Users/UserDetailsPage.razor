@@ -102,7 +102,6 @@
         {
             _notifications.ShowErrorNotifications(response?.Errors ?? new List<string>() { "Failed to process response." });
         }
-        StateHasChanged();
     }
 
     private async Task RefreshRoles()

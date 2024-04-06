@@ -171,6 +171,8 @@
                     var result = await _api.UploadProfilePhoto(Id, base64);
                     if (result?.IsSuccess == true)
                     {
+                        // introduce a slight delay so we can get the latest image from blob storage.
+                        await Task.Delay(200);
                         _notifications.ShowSuccess("Photo uploaded successfully.");
                         await RefreshUser();
                     }

@@ -63,12 +63,12 @@ namespace BlazorStack.Services
             return content;
         }
 
-        public async Task<UserInfo?> GetUserInfo()
+        public async Task<ApplicationResponse<UserInfo>?> GetUserInfo()
         {
             try
             {
                 var result = await _http.GetAsync("manage/info");
-                return await result.Content.ReadFromJsonAsync<UserInfo>();
+                return await result.Content.ReadFromJsonAsync<ApplicationResponse<UserInfo>>();
             }
             catch (Exception)
             {

@@ -50,8 +50,9 @@ namespace BlazorStack.Portal.Auth
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var userInfo = await _api.GetUserInfo();
-            if (userInfo == null) return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            var userInfoResponse = await _api.GetUserInfo();
+            if (!userInfoResponse?.IsSuccess == true || userInfoResponse is null || userInfoResponse.Data is null) return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            var userInfo = userInfoResponse.Data;
 
             var claims = new List<Claim>
                     {
@@ -77,9 +78,9 @@ namespace BlazorStack.Portal.Auth
             }
 
             var additionalInfo = await _api.GetUserAdditionalInfo();
-            if (additionalInfo != null)
+            if (additionalInfo != null && !string.IsNullOrEmpty(additionalInfo?.Data?.PhotoUrl))
             {
-                claims.Add(new Claim("photo-url", additionalInfo?.Data.PhotoUrl.AddTimestampQueryString() ?? string.Empty));
+                claims.Add(new Claim("photo-url", additionalInfo?.Data?.PhotoUrl.AddTimestampQueryString() ?? string.Empty));
             }
             var id = new ClaimsIdentity(claims, nameof(TokenAuthenticationStateProvider));
             var user = new AuthenticationState(new ClaimsPrincipal(id));

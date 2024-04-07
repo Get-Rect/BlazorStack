@@ -17,7 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=blazorstack.db"));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Integrated Security=true"));
 builder.Services.Configure<StorageAccountSettings>(builder.Configuration.GetSection("StorageAccount"));
 builder.Services.AddTransient<BlobService>();
 

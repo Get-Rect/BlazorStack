@@ -32,13 +32,13 @@ namespace BlazorStack.Data
                     if (dbRole == null) await rolesManager.CreateAsync(new IdentityRole { Name = role });
                 }
 
-                if (!context.Users.Any(x => x.Email == "heggelund.john@gmail.com"))
+                if (!context.Users.Any(x => defaultAdminEmail.Equals(x.Email)))
                 {        
                     var userResult = await userManager.CreateAsync(new ApplicationUser() { Email = defaultAdminEmail, UserName = defaultAdminEmail }, "Test123!");
                     if (!userResult.Succeeded) throw new Exception("Failed to create default admin user.");
                 }
 
-                var defaultAdmin = await userManager.FindByEmailAsync("heggelund.john@gmail.com") ?? throw new Exception("Error seeding admin user");
+                var defaultAdmin = await userManager.FindByEmailAsync(defaultAdminEmail) ?? throw new Exception("Error seeding admin user");
                 if (!await userManager.IsInRoleAsync(defaultAdmin, "Admin"))
                 {
                     var roleResult = await userManager.AddToRoleAsync(defaultAdmin, "Admin");

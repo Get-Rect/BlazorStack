@@ -164,6 +164,7 @@
         else
         {
             _notifications.ShowSuccess("User created successfully.");
+            newUser = new();
             ToggleModal();
             await RefreshUsers();
         }

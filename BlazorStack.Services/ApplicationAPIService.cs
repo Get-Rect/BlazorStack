@@ -1,4 +1,5 @@
-﻿using BlazorStack.Services.Models;
+﻿using BlazorStack.Data.Models;
+using BlazorStack.Services.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -68,6 +69,19 @@ namespace BlazorStack.Services
             {
                 var result = await _http.GetAsync("manage/info");
                 return await result.Content.ReadFromJsonAsync<UserInfo>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<ApplicationResponse<ApplicationUser>?> GetUserAdditionalInfo()
+        {
+            try
+            {
+                var result = await _http.GetAsync("account/me");
+                return await result.Content.ReadFromJsonAsync<ApplicationResponse<ApplicationUser>>();
             }
             catch (Exception)
             {

@@ -1,9 +1,11 @@
 ﻿using Blazored.LocalStorage;
 using BlazorStack.Portal.Services;
 using BlazorStack.Services;
+using BlazorStack.Services.Extensions;
 using BlazorStack.Services.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.ComponentModel;
+using System.Data;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
@@ -72,6 +74,12 @@ namespace BlazorStack.Portal.Auth
                         claims.Add(new Claim(role.Type, role.Value, role.ValueType, role.Issuer, role.OriginalIssuer));
                     }
                 }
+            }
+
+            var additionalInfo = await _api.GetUserAdditionalInfo();
+            if (additionalInfo != null)
+            {
+                claims.Add(new Claim("photo-url", additionalInfo?.Data.PhotoUrl.AddTimestampQueryString() ?? string.Empty));
             }
             var id = new ClaimsIdentity(claims, nameof(TokenAuthenticationStateProvider));
             var user = new AuthenticationState(new ClaimsPrincipal(id));

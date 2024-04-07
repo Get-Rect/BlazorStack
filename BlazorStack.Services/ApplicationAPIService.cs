@@ -51,9 +51,16 @@ namespace BlazorStack.Services
 
         public async Task<ApplicationResponse<List<string>>?> GetAllRoles()
         {
-            var response = await _http.GetAsync("users/allroles");
-            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<List<string>>>();
-            return content;
+            try
+            {
+                var response = await _http.GetAsync("users/allroles");
+                var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<List<string>>>();
+                return content;
+            }
+            catch (HttpRequestException ex)
+            {
+                return new ApplicationResponse<List<string>>(ex);
+            }
         }
 
         public async Task<ApplicationResponse<bool?>?> CreateUser(UserViewModel newUser)
@@ -89,16 +96,16 @@ namespace BlazorStack.Services
             }
         }
 
-        public async Task<List<RoleClaim>?> GetRoles()
+        public async Task<ApplicationResponse<List<RoleClaim>>?> GetRoles()
         {
             try
             {
                 var result = await _http.GetAsync("account/roles");
-                return await result.Content.ReadFromJsonAsync<List<RoleClaim>>();
+                return await result.Content.ReadFromJsonAsync<ApplicationResponse<List<RoleClaim>>>();
             }
-            catch (Exception)
+            catch (HttpRequestException ex)
             {
-                return null;
+                return new ApplicationResponse<List<RoleClaim>>(ex);
             }
         }
 
@@ -109,9 +116,9 @@ namespace BlazorStack.Services
                 var result = await _http.GetAsync("users");
                 return await result.Content.ReadFromJsonAsync<ApplicationResponse<List<UserViewModel>>?>();
             }
-            catch (Exception)
+            catch (HttpRequestException ex)
             {
-                return null;
+                return new ApplicationResponse<List<UserViewModel>>(ex);
             }
         }
 

@@ -9,7 +9,7 @@
 @inject ApplicationAPIService _api
 @inject NavigationManager _nav;
 @inject NotificationService _notifications;
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Admin")]
 
 <div class="scrollable-card">
     <h3>Users</h3>

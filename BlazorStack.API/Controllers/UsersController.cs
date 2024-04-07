@@ -12,7 +12,7 @@ using BlazorStack.API.Middleware;
 namespace BlazorStack.API.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {

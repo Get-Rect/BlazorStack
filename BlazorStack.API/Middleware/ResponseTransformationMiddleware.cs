@@ -30,6 +30,10 @@ namespace BlazorStack.API.Middleware
             {
                 await HandleUnauthorizedResponse(context, responseBody);
             }
+            else if(context.Response.StatusCode == 403)
+            {
+                await HandleForbiddenResponse(context, responseBody);
+            }
             else if(context.Response.StatusCode == 404)
             {
                 await HandleNotFoundResponse(context, responseBody);
@@ -76,24 +80,17 @@ namespace BlazorStack.API.Middleware
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
         }
 
-        private async Task HandleNotFoundResponse(HttpContext context, MemoryStream responseBody)
+        private async Task HandleNotFoundResponse(HttpContext context, MemoryStream responseBody) => await HandleUnsuccessfulResponse(context, responseBody, "Not found.");
+
+        private async Task HandleUnauthorizedResponse(HttpContext context, MemoryStream responseBody) => await HandleUnsuccessfulResponse(context, responseBody, "Unauthorized.");
+        private async Task HandleForbiddenResponse(HttpContext context, MemoryStream responseBody) => await HandleUnsuccessfulResponse(context, responseBody, "Forbidden.");
+
+        private async Task HandleUnsuccessfulResponse(HttpContext context, MemoryStream responseBody, string errorMessage)
         {
             var response = new ApplicationResponse<object>
             {
                 StatusCode = context.Response.StatusCode,
-                Errors = new List<string>() { $"{context.Request.GetDisplayUrl()} not found." },
-                Data = null
-            };
-
-            await context.Response.WriteAsync(JsonSerializer.Serialize(response));
-        }
-
-        private async Task HandleUnauthorizedResponse(HttpContext context, MemoryStream responseBody)
-        {
-            var response = new ApplicationResponse<object>
-            {
-                StatusCode = context.Response.StatusCode,
-                Errors = new List<string>() { $"Unauthorized." },
+                Errors = new List<string>() { errorMessage },
                 Data = null
             };
 

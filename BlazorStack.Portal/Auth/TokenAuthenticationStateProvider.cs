@@ -64,7 +64,9 @@ namespace BlazorStack.Portal.Auth
                 userInfo.Claims.Where(c => c.Key != ClaimTypes.Name && c.Key != ClaimTypes.Email)
                     .Select(c => new Claim(c.Key, c.Value)));
 
-            var roles = await _api.GetRoles();
+            var rolesResponse = await _api.GetRoles();
+            if(!rolesResponse?.IsSuccess == true || rolesResponse is null) return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            var roles = rolesResponse?.Data;
 
             if (roles?.Count > 0)
             {

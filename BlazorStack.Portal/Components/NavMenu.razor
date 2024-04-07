@@ -1,13 +1,31 @@
-﻿@inject NavigationManager _nav;
+﻿@using Microsoft.AspNetCore.Components.Authorization
 
-<div class="nav-menu">
-    <div class="page-link" @onclick="@(() => _nav.NavigateTo("/"))">
-        @(isNavMenuCollapsed ? "" : "Home ")<i class="fa-solid fa-house"></i>
-    </div>
-    <div class="page-link" @onclick="@(() => _nav.NavigateTo("/users"))">
-        @(isNavMenuCollapsed ? "" : "Users ")<i class="fa-solid fa-users"></i>
-    </div>
-</div>
+@inject NavigationManager _nav;
+
+
+<AuthorizeView>
+    <Authorized>
+        <div class="nav-menu">
+            <div class="page-link" @onclick="@(() => _nav.NavigateTo("/"))">
+                @(isNavMenuCollapsed ? "" : "Home ")<i class="fa-solid fa-house"></i>
+            </div>
+            @if (context.User.IsInRole("Admin"))
+            {
+                <div class="page-link" @onclick="@(() => _nav.NavigateTo("/users"))">
+                    @(isNavMenuCollapsed ? "" : "Users ")<i class="fa-solid fa-users"></i>
+                </div>
+            }
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="nav-menu">
+            <div class="page-link" @onclick="@(() => _nav.NavigateTo("/"))">
+                @(isNavMenuCollapsed ? "" : "Home ")<i class="fa-solid fa-house"></i>
+            </div>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
 
 <button @onclick="ToggleNavMenu"><i class="fa-solid fa-arrow-@(isNavMenuCollapsed ? "right" : "left")"></i></button>
 

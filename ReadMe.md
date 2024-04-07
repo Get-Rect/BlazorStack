@@ -10,7 +10,7 @@ This web app and api demonstrate how easy it is to create a Blazor Web Assembly 
 - Manage users on a users page
 - Upload profile photos for users
 ### Backend
-- ASP.Net Web API Secured ASP.Net Identity
+- ASP.Net Web API Secured with ASP.Net Identity
 - Role based authorization for accessing different API endpoints
 - In memory response caching middleware for performance
 - Response formatting middleware for consistent responses and easier frontend error handling.
@@ -22,7 +22,6 @@ This web app and api demonstrate how easy it is to create a Blazor Web Assembly 
 
 
 ## Setup
-This application is setup to use sql server and localdb.
 1. Execute "update-database" in package manager console with BlazorStack.API selected as your startup program and BlazorStack.Data selected as your default project.
 2. Setup an Azurite Emulator.
     - Either use Docker or the built in VS Azurite emulator

@@ -7,6 +7,7 @@ using BlazorStack.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BlazorStack.Services;
+using BlazorStack.API.Middleware;
 
 namespace BlazorStack.API.Controllers
 {
@@ -30,6 +31,7 @@ namespace BlazorStack.API.Controllers
             _blobs = blobs;
         }
 
+        [ServiceFilter(typeof(CacheResourceFilter))]
         [HttpGet(Name = "Users")]
         public async Task<IActionResult> GetUsers(string search = "")
         {
@@ -45,6 +47,7 @@ namespace BlazorStack.API.Controllers
             return Ok(userViewModels);
         }
 
+        [ServiceFilter(typeof(EvictCacheKeysFilter))]
         [HttpPost(Name = "Create User")]
         public async Task<IActionResult> CreateUser(UserViewModel newUser)
         {
@@ -59,7 +62,7 @@ namespace BlazorStack.API.Controllers
             var createdUser = await _users.FindByEmailAsync(newUser.Email);
             if (createdUser == null) return BadRequest(new List<string>() { "Failed to find created user." });
 
-            if (string.IsNullOrEmpty(newUser.Role)) return Created();
+            if (string.IsNullOrEmpty(newUser.Role)) return Ok(true);
 
             var roleResult = await _users.AddToRoleAsync(createdUser, newUser.Role);
             if (!roleResult.Succeeded)
@@ -96,6 +99,7 @@ namespace BlazorStack.API.Controllers
             else return Ok(true);
         }
 
+        [ServiceFilter(typeof(EvictCacheKeysFilter))]
         [HttpPost("update-role/{id}", Name = "Update Role")]
         public async Task<IActionResult> UpdateRole([FromRoute] string id, [FromBody] UpdateRoleRequest request)
         {
@@ -119,6 +123,7 @@ namespace BlazorStack.API.Controllers
             else return Ok(true);
         }
 
+        [ServiceFilter(typeof(EvictCacheKeysFilter))]
         [HttpDelete("{id}", Name = "Delete User")]
         public async Task<IActionResult> DeleteUser([FromRoute] string id)
         {
@@ -129,6 +134,7 @@ namespace BlazorStack.API.Controllers
             else return Ok(true);
         }
 
+        [ServiceFilter(typeof(CacheResourceFilter))]
         [HttpGet("{Id}", Name = "User")]
         public async Task<IActionResult> GetUser([FromRoute] string Id)
         {
@@ -148,6 +154,7 @@ namespace BlazorStack.API.Controllers
             return Ok(userDetailsViewModel);
         }
 
+        [ServiceFilter(typeof(EvictCacheKeysFilter))]
         [HttpPost("{userId}/upload-profile-photo")]
         public async Task<IActionResult> UploadProfilePhoto([FromRoute] string userId, [FromBody] UploadRequest request)
         {

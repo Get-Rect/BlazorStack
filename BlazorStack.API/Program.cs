@@ -30,6 +30,10 @@ builder.Services.AddIdentityCore<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddApiEndpoints();
 
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<CacheResourceFilter>();
+builder.Services.AddScoped<EvictCacheKeysFilter>();
+
 // Add a CORS policy for the client
 builder.Services.AddCors(
     options => options.AddPolicy(

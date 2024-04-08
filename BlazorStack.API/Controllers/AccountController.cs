@@ -12,14 +12,10 @@ namespace BlazorStack.API.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _users;
-        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(ILogger<AccountController> logger, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> users)
+        public AccountController(UserManager<ApplicationUser> users)
         {
-            _logger = logger;
-            _signInManager = signInManager;
             _users = users;
         }
 
@@ -52,29 +48,13 @@ namespace BlazorStack.API.Controllers
         [HttpGet("me", Name = "Get Loggedin User Info")]
         public async Task<IActionResult> GetMe()
         {
-            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null) return Unauthorized(); // or NotFound(), depending on your preference
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
 
             var user = await _users.FindByIdAsync(userId);
             if (user == null) return Unauthorized();
 
             return Ok(user);
         }
-
-
-        //[HttpPost("logout", Name = "Logout")]
-        //[Authorize]
-        //public async Task<IActionResult> Logout()
-        //{
-        //    try
-        //    {
-        //        await _signInManager.SignOutAsync();
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
     }
 }

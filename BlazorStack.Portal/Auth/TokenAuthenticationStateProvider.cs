@@ -2,15 +2,10 @@
 using BlazorStack.Portal.Services;
 using BlazorStack.Services;
 using BlazorStack.Services.Extensions;
-using BlazorStack.Services.Models;
+using BlazorStack.Services.Models.ViewModels;
 using Microsoft.AspNetCore.Components.Authorization;
-using System.ComponentModel;
 using System.Data;
-using System.Net.Http;
 using System.Security.Claims;
-using System.Text;
-using System.Text.Json;
-using static System.Net.WebRequestMethods;
 
 namespace BlazorStack.Portal.Auth
 {

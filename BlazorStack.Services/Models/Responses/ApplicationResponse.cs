@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlazorStack.Services.Models
+namespace BlazorStack.Services.Models.Responses
 {
     public class ApplicationResponse<T>
     {
@@ -19,6 +19,6 @@ namespace BlazorStack.Services.Models
         public int StatusCode { get; set; }
         public List<string>? Errors { get; set; }
         public T? Data { get; set; }
-        public bool IsSuccess { get => StatusCode >= 200 && StatusCode <= 299; } 
+        public bool IsSuccess { get => StatusCode >= 200 && StatusCode <= 299; }
     }
 }

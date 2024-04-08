@@ -1,10 +1,14 @@
 ﻿using BlazorStack.Services.Models;
+using BlazorStack.Services.Models.Responses;
 using Microsoft.AspNetCore.Http.Extensions;
 using System.Net;
 using System.Text.Json;
 
 namespace BlazorStack.API.Middleware
 {
+    /// <summary>
+    /// Transforms all responses from the API to a consitent format based on the ApplicationResponse<T> class.
+    /// </summary>
     public class ResponseTransformationMiddleware
     {
         private readonly RequestDelegate _next;
@@ -80,12 +84,7 @@ namespace BlazorStack.API.Middleware
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
         }
 
-        private async Task HandleNotFoundResponse(HttpContext context, MemoryStream responseBody) => await HandleUnsuccessfulResponse(context, responseBody, "Not found.");
-
-        private async Task HandleUnauthorizedResponse(HttpContext context, MemoryStream responseBody) => await HandleUnsuccessfulResponse(context, responseBody, "Unauthorized.");
-        private async Task HandleForbiddenResponse(HttpContext context, MemoryStream responseBody) => await HandleUnsuccessfulResponse(context, responseBody, "Forbidden.");
-
-        private async Task HandleUnsuccessfulResponse(HttpContext context, MemoryStream responseBody, string errorMessage)
+        private async Task HandleUnsuccessfulResponse(HttpContext context, string errorMessage)
         {
             var response = new ApplicationResponse<object>
             {
@@ -96,5 +95,9 @@ namespace BlazorStack.API.Middleware
 
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
         }
+
+        private async Task HandleNotFoundResponse(HttpContext context, MemoryStream responseBody) => await HandleUnsuccessfulResponse(context, "Not found.");
+        private async Task HandleUnauthorizedResponse(HttpContext context, MemoryStream responseBody) => await HandleUnsuccessfulResponse(context, "Unauthorized.");
+        private async Task HandleForbiddenResponse(HttpContext context, MemoryStream responseBody) => await HandleUnsuccessfulResponse(context, "Forbidden.");
     }
 }

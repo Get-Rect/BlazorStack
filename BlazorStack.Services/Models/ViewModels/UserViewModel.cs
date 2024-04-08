@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlazorStack.Services.Models
+namespace BlazorStack.Services.Models.ViewModels
 {
     public class UserViewModel
     {

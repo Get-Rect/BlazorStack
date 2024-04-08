@@ -1,13 +1,9 @@
 ﻿using BlazorStack.Data.Models;
 using BlazorStack.Services.Models;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+using BlazorStack.Services.Models.Requests;
+using BlazorStack.Services.Models.Responses;
+using BlazorStack.Services.Models.ViewModels;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlazorStack.Services
 {

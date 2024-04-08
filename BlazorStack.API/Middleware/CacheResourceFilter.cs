@@ -21,7 +21,6 @@ public class CacheResourceFilter : IResourceFilter
 
         if (_cache.TryGetValue(requestUri, out object? cachedValue))
         {
-            // If the cache contains the result for the requested URI, return it directly.
             var result = new OkObjectResult(cachedValue);
             context.Result = result;
         }
@@ -29,12 +28,13 @@ public class CacheResourceFilter : IResourceFilter
 
     public void OnResourceExecuted(ResourceExecutedContext context)
     {
-        // If the response is successful, cache it.
         if (context.Result is ObjectResult result)
         {
             var requestUri = context.HttpContext.Request.GetDisplayUrl();
             var path = context.HttpContext.Request.Path.ToString().GetBasePath();
             
+            // create a cache entry to hold the unique uri's we have cache entries for based on controller name
+            // for example, '/users?search="test"' and all its variations will get added to a list of strings cached with the key "users"
             var cacheValue = _cache.GetOrCreate(path, entry =>
             {
                 entry.Value = new List<string>();
@@ -45,7 +45,7 @@ public class CacheResourceFilter : IResourceFilter
             if (!keyAlreadyExists)
             {
                 if (cacheValue is not null) cacheValue.Add(requestUri);
-                _cache.Set("users", cacheValue);
+                _cache.Set(path, cacheValue);
             }
 
             _cache.Set(requestUri, result.Value, TimeSpan.FromMinutes(5)); // Cache duration of 5 minutes

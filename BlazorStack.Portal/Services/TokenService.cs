@@ -1,5 +1,5 @@
 ﻿using Blazored.LocalStorage;
-using BlazorStack.Services.Models;
+using BlazorStack.Services.Models.Responses;
 using System.Net.Http.Json;
 using System.Text.Json;
 

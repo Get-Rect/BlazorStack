@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BlazorStack.Services;
 using BlazorStack.API.Middleware;
+using BlazorStack.Services.Models.Requests;
+using BlazorStack.Services.Models.ViewModels;
+using BlazorStack.Services.Models.Responses;
 
 namespace BlazorStack.API.Controllers
 {
@@ -20,11 +23,9 @@ namespace BlazorStack.API.Controllers
         private readonly UserManager<ApplicationUser> _users;
         private readonly RoleManager<IdentityRole> _roles;
         private readonly BlobService _blobs;
-        private readonly ILogger<UsersController> _logger;
 
-        public UsersController(ILogger<UsersController> logger, ApplicationDbContext db, UserManager<ApplicationUser> users, RoleManager<IdentityRole> roles, BlobService blobs)
+        public UsersController(ApplicationDbContext db, UserManager<ApplicationUser> users, RoleManager<IdentityRole> roles, BlobService blobs)
         {
-            _logger = logger;
             _db = db;
             _users = users;
             _roles = roles;
@@ -33,7 +34,7 @@ namespace BlazorStack.API.Controllers
 
         [ServiceFilter(typeof(CacheResourceFilter))]
         [HttpGet(Name = "Users")]
-        public async Task<IActionResult> GetUsers(string search = "")
+        public async Task<IActionResult> GetUsers()
         {
             var users = _db.Users.AsQueryable();
             var userRoles = _db.UserRoles.ToList();
@@ -91,8 +92,10 @@ namespace BlazorStack.API.Controllers
         public async Task<IActionResult> ChangePassword([FromRoute] string id, [FromBody] ChangePasswordRequest request)
         {
             var newPassword = request.newPassword;
+
             var user = await _users.FindByIdAsync(id);
             if (user == null) return BadRequest(new List<string>() { "User not found." });
+
             var token = await _users.GeneratePasswordResetTokenAsync(user);
             var result = await _users.ResetPasswordAsync(user, token, newPassword);
             if (result.Errors.Any()) return BadRequest(result.Errors.Select(x => x.Description).ToList());
@@ -105,6 +108,7 @@ namespace BlazorStack.API.Controllers
         {
             var user = await _users.FindByIdAsync(id);
             if (user == null) return BadRequest(new List<string>() { "User not found." });
+
             var userRoles = await _users.GetRolesAsync(user);
             if (userRoles.Any())
             {
@@ -129,6 +133,7 @@ namespace BlazorStack.API.Controllers
         {
             var user = await _users.FindByIdAsync(id);
             if (user is null) return BadRequest(new List<string>() { "User not found." });
+
             var result = await _users.DeleteAsync(user);
             if (result.Errors.Any()) return BadRequest(result.Errors.Select(x => x.Description).ToList());
             else return Ok(true);
@@ -171,7 +176,7 @@ namespace BlazorStack.API.Controllers
                 user.PhotoUrl = uri;
                 var updateUserResponse = await _users.UpdateAsync(user);
                 if (!updateUserResponse.Succeeded) return BadRequest(updateUserResponse.Errors.Select(x => x.Description));
-                //TODO: Update logic to delete photo if updating user fails.
+
                 return Ok(new PhotoUploadResponse() { Uri = uri });
             }
         }

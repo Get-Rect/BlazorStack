@@ -36,7 +36,7 @@ namespace BlazorStack.Portal.Services
         public void ShowSuccess(string message) => ShowNotification(message, NotificationType.Success);
 
 
-        public void ShowErrorNotifications(List<string> errors)
+        public void ShowErrors(List<string> errors)
         {
             foreach (var error in errors)
             {
@@ -64,5 +64,4 @@ namespace BlazorStack.Portal.Services
 
         private void NotifyStateChanged() => OnChange?.Invoke();
     }
-
 }

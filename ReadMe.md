@@ -3,12 +3,19 @@ This web app and api demonstrate how easy it is to create a Blazor Web Assembly 
 
 ## Features
 ### Front End
-- Standalone Blazor Web Assembly front-end secured with ASP.Net Identity
+- Standalone Blazor Web Assembly application secured with ASP.Net Identity
 - Role based authorization
-    - To access different pages / components
-    - Different visible content within components
-- Manage users on a users page
-- Upload profile photos for users
+    - Only Admins can view / edit users
+    - Only Admins see the Users icon in the nav bar component
+- Users page
+    - Add a new user
+    - Delete a user
+    - Navigate to a user's details
+- User Details Page
+    - Update user's role
+    - Change user's password
+    - Upload profile photo
+- Notification service to display "toasts" on success or failure
 ### Backend
 - ASP.Net Web API Secured with ASP.Net Identity
 - Role based authorization for accessing different API endpoints
@@ -19,7 +26,6 @@ This web app and api demonstrate how easy it is to create a Blazor Web Assembly 
 
 ### In Development
 - Signlar R for live refreshing of data
-
 
 ## Setup
 1. Execute "update-database" in package manager console with BlazorStack.API selected as your startup program and BlazorStack.Data selected as your default project.

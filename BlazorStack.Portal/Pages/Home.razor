@@ -5,18 +5,85 @@
 @attribute [Authorize]
 @inject NotificationService NotificationService
 
-<PageTitle>Home</PageTitle>
+<div class="scrollable-card gap-0">
+    <div>
+        <h2>Summary</h2>
+        <p>This web app and api demonstrate how easy it is to create a Blazor Web Assembly app secured with ASP.Net Identity in .Net 8.</p>
+    </div>
 
-<div class="scrollable-card">
-    <h1>Welcome to B#</h1>
+    <div>
+        <h2>Features</h2>
+        <h3>Front End</h3>
+        <ul>
+            <li>Standalone Blazor Web Assembly application secured with ASP.Net Identity</li>
+            <li>
+                Role based authorization
+                <ul>
+                    <li>Only Admins can view / edit users</li>
+                    <li>Only Admins see the Users icon in the nav bar component</li>
+                </ul>
+            </li>
+            <li>
+                Users page
+                <ul>
+                    <li>Add a new user</li>
+                    <li>Delete a user</li>
+                    <li>Navigate to a user's details</li>
+                </ul>
+            </li>
+            <li>
+                User Details Page
+                <ul>
+                    <li>Update user's role</li>
+                    <li>Change user's password</li>
+                    <li>Upload profile photo</li>
+                </ul>
+            </li>
+            <li>Notification service to display "toasts" on success or failure</li>
+        </ul>
 
-    This application is an example of how simple and performant Blazor web assembly applications can be using ASP.NET Identity for security and no custom Javascript.
-    <button @onclick="ShowSuccess">Show Success</button>
+        <h3>Backend</h3>
+        <ul>
+            <li>ASP.Net Web API Secured with ASP.Net Identity</li>
+            <li>Role based authorization for accessing different API endpoints</li>
+            <li>In memory response caching middleware for performance</li>
+            <li>Response formatting middleware for consistent responses and easier frontend error handling.</li>
+            <li>SQL Server with LocalDB for local development.</li>
+            <li>Azurite development storage for local development.</li>
+        </ul>
+        <h3>In Development</h3>
+        <ul>
+            <li>Signlar R for live refreshing of data</li>
+        </ul>
+    </div>
+
+    <div>
+        <h2>Resources</h2>
+        <ul>
+            <li><a href="https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-8.0">https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-8.0</a></li>
+            <li><a href="https://github.com/dotnet/blazor-samples/blob/main/8.0/BlazorWebAssemblyStandaloneWithIdentity/BlazorWasmAuth/Program.cs">https://github.com/dotnet/blazor-samples/blob/main/8.0/BlazorWebAssemblyStandaloneWithIdentity/BlazorWasmAuth/Program.cs</a></li>
+            <li><a href="https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio%2Cblob-storage">https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio%2Cblob-storage</a></li>
+        </ul>
+    </div>
 </div>
 
-@code {
-    private void ShowSuccess()
-    {
-        NotificationService.ShowNotification("Operation successful!", NotificationType.Success);
+<style>
+    p {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
     }
+
+    h2, h3 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+    }
+
+    ul {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+@code {
+
 }

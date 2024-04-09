@@ -26,13 +26,15 @@
     </AuthorizeView>
 </div>
 
-<div class="@SideBarCssClass">
-    <BlazorStack.Portal.Components.NavMenu OnCollapseMenu="CollapseMenu" />
-</div>
+<div class="page-container">
+    <div class="@SideBarCssClass">
+        <BlazorStack.Portal.Components.NavMenu OnCollapseMenu="CollapseMenu" />
+    </div>
 
-<div class="main @(SideBarIsCollapsed ? "shifted" : "")">
-    <div class="content">
-        @Body
+    <div class="main @(SideBarIsCollapsed ? "shifted" : "")">
+        <div class="content">
+            @Body
+        </div>
     </div>
 </div>
 

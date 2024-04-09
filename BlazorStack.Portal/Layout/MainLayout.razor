@@ -17,7 +17,6 @@
                 <img src="@context.User.GetPhotoUrl()" alt="Profile" />
                 <div class="@($"context-menu {MenuVisibilityClass}")">
                     <ul>
-                        <li><a href="/account-settings">Account Settings</a></li>
                         <li><a href="@($"/logout?returnUrl={_nav.Uri}")">Logout</a></li>
                     </ul>
                 </div>

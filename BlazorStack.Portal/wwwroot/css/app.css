@@ -390,7 +390,7 @@ select.rounded {
 }
 
 .users-list {
-
+    overflow: auto;
 }
 
     .users-list .header {

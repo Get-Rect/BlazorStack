@@ -34,3 +34,5 @@ builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddSingleton<NotificationService>();
 
 await builder.Build().RunAsync();
+
+//test

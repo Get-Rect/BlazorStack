@@ -18,6 +18,14 @@
     <div class="filter-row">
         <!-- Add filter elements here -->
         <input class="rounded" type="text" placeholder="Search users..." @oninput="OnSearchChanged" />
+        <select @onchange="OnRoleFilterChange" class="custom-dropdown">
+            <option value="">Filter by Role</option>
+            <option value="No Role">No Role</option>
+            @foreach(var role in roles)
+            {
+                <option value="@role">@role</option>
+            }
+        </select>
         <button class="green" @onclick="ToggleModal"><i class="fa-solid fa-plus"></i></button>
     </div>
 
@@ -79,11 +87,13 @@
     private List<string> roles = new List<string>();
     private UserViewModel? UserToDelete;
     private List<UserViewModel>? Users = new List<UserViewModel>(); // Populate this list with your users
-    private List<UserViewModel>? FilteredUsers => Users?.Where(u => u.FirstName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+    private List<UserViewModel>? FilteredUsers => Users?.Where(u => (u.FirstName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                                                          u.LastName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                                                         u.Email.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+                                                         u.Email.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) &&
+                                                         (string.IsNullOrEmpty(RoleFilter) ? true : (u.Role.Equals(RoleFilter, StringComparison.OrdinalIgnoreCase) || ((RoleFilter.Equals("No Role", StringComparison.OrdinalIgnoreCase) && string.IsNullOrEmpty(u.Role)))))).ToList();
 
     private string SearchQuery = string.Empty;
+    private string RoleFilter = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -122,6 +132,14 @@
         if (e is null || e.Value is null) return;
 
         SearchQuery = e?.Value?.ToString() ?? string.Empty;
+        StateHasChanged();
+    }
+
+    private void OnRoleFilterChange(ChangeEventArgs e)
+    {
+        if (e is null || e.Value is null) return;
+
+        RoleFilter = e?.Value?.ToString() ?? string.Empty;
         StateHasChanged();
     }
 

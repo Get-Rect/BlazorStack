@@ -7,12 +7,12 @@
     <Authorized>
         <div class="nav-menu">
             <div class="page-link" @onclick="@(() => _nav.NavigateTo("/"))">
-                @(isNavMenuCollapsed ? "" : "Home ")<i class="fa-solid fa-house"></i>
+                <i class="fa-solid fa-house"></i><span>@(isNavMenuCollapsed ? "" : "Home ")</span>
             </div>
             @if (context.User.IsInRole("Admin"))
             {
                 <div class="page-link" @onclick="@(() => _nav.NavigateTo("/users"))">
-                    @(isNavMenuCollapsed ? "" : "Users ")<i class="fa-solid fa-users"></i>
+                    <i class="fa-solid fa-users"></i><span>@(isNavMenuCollapsed ? "" : "Users ")</span>
                 </div>
             }
         </div>
@@ -20,14 +20,14 @@
     <NotAuthorized>
         <div class="nav-menu">
             <div class="page-link" @onclick="@(() => _nav.NavigateTo("/"))">
-                @(isNavMenuCollapsed ? "" : "Home ")<i class="fa-solid fa-house"></i>
+                <i class="fa-solid fa-house"></i><span>@(isNavMenuCollapsed ? "" : "Home ")</span>
             </div>
         </div>
     </NotAuthorized>
 </AuthorizeView>
 
 
-<button @onclick="ToggleNavMenu"><i class="fa-solid fa-arrow-@(isNavMenuCollapsed ? "right" : "left")"></i></button>
+<button class="collapse-menu" @onclick="ToggleNavMenu"><i class="fa-solid fa-arrow-@(isNavMenuCollapsed ? "right" : "left")"></i></button>
 
 @code {
     [Parameter]

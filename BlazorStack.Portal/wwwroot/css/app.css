@@ -206,14 +206,6 @@ body {
     border-radius: 0.25rem;
 }
 
-/* You might want to add additional media queries for responsiveness */
-@media (max-width: 600px) {
-    .scrollable-card {
-        margin: 10px;
-        padding: 10px;
-    }
-}
-
 .modal {
     display: none;
     position: fixed;
@@ -527,6 +519,7 @@ button {
     flex-direction: column;
     gap: 2rem;
     align-items: center;
+    min-width: 4rem;
 }
 
     /* Collapsed sidebar styling */
@@ -534,6 +527,11 @@ button {
         width: 4rem;
         overflow: hidden;
         padding: 3rem 1rem 1rem 1rem;
+        min-width: 4rem;
+    }
+
+    .sidebar.collapsed .nav-menu .page-link {
+        gap: 0;
     }
 
 .nav-menu {
@@ -554,11 +552,19 @@ button {
         gap: 1rem;
         padding: 1rem;
         color: var(--primary);
+        overflow: hidden;
     }
 
-        .nav-menu .page-link:hover {
-            background-color: #f1f1f1;
-        }
+/* You might want to add additional media queries for responsiveness */
+@media (max-width: 1025px) {
+    .nav-menu .page-link span{
+        display: none;
+    }
+
+    .sidebar button.collapse-menu{
+        display: none;
+    }
+}
 
 .pointer {
     cursor: pointer;

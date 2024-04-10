@@ -19,15 +19,8 @@ namespace BlazorStack.Portal.Services
         {
             var notificationMessage = new NotificationMessage { Message = message, Type = type };
             _messages.Insert(0, notificationMessage);
-
-            if (_messages.Count > 5)
-            {
-                var messageToRemove = _messages[5];
-                _messages.RemoveAt(5);
-                RemoveMessageTimer(messageToRemove);
-            }
-
-            var timer = new Timer(RemoveMessageCallback, notificationMessage, TimeSpan.FromSeconds(10), Timeout.InfiniteTimeSpan);
+            var timer = new Timer(RemoveMessageCallback, notificationMessage, TimeSpan.FromSeconds(9), Timeout.InfiniteTimeSpan);
+            _messageTimers.Add(notificationMessage, timer);
 
             NotifyStateChanged();
         }

@@ -3,6 +3,7 @@
 @using Blazored.LocalStorage
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
+@using System.ComponentModel.DataAnnotations
 
 @page "/login"
 @layout LoginLayout
@@ -19,24 +20,22 @@
         <div class="login-logo">
             <img src="/img/B-Sharp-Logo.jpg" alt="B# Logo" />
         </div>
-        @if (errors)
-        {
-            @foreach (var error in errorList)
-            {
-                <div class="alert alert-danger">@error</div>
-            }
-        }
-        <div class="flex-outer">
-            <div class="form-group">
-                <input class="form-field" required id="email" name="emailInput" placeholder="Email" type="email" @bind-value="email" @onkeydown="@Enter"/>
+        <EditForm Model="loginVM" OnValidSubmit="DoLoginAsync">
+            <DataAnnotationsValidator />
+            <div class="flex-outer">
+                <div class="form-group">
+                    <InputText class="form-field" placeholder="Email" type="email" @bind-Value="loginVM.Email" />
+                    <ValidationMessage For="@(() => loginVM.Email)"/>
+                </div>
+                <div class="form-group">
+                    <InputText class="form-field" placeholder="Password" type="password" @bind-Value="loginVM.Password" />
+                    <ValidationMessage For="@(() => loginVM.Password)" />
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
             </div>
-            <div class="form-group">
-                <input class="form-field" required id="password" name="passwordInput" placeholder="Password" type="password" @bind-value="password" @onkeydown="@Enter" />
-            </div>
-            <div>
-                <button class="btn btn-primary" @onclick="DoLoginAsync">Login</button>
-            </div>
-        </div>
+        </EditForm>
     </div>
     <div class="right-half">
         <img src="/img/login-background.png" />
@@ -44,38 +43,12 @@
 </div>
 
 @code {
-    private bool success, errors;
-    private string email = string.Empty;
-    private string password = string.Empty;
-    private string[] errorList;
-
-    private async Task Enter(KeyboardEventArgs e)
-    {
-        if (e.Code == "Enter") await DoLoginAsync();
-    }
+    [SupplyParameterFromForm]
+    public LoginViewModel loginVM { get; set; } = new();
 
     public async Task DoLoginAsync()
     {
-        success = errors = false;
-        errorList = [];
-
-        if (string.IsNullOrWhiteSpace(email))
-        {
-            errors = true;
-            errorList = ["Email is required."];
-
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(password))
-        {
-            errors = true;
-            errorList = ["Password is required."];
-
-            return;
-        }
-
-        string error = await _account.Login(email, password);
+        string error = await _account.Login(loginVM?.Email ?? string.Empty, loginVM?.Password ?? string.Empty);
         if (string.IsNullOrEmpty(error))
         {
             _nav.NavigateTo(_nav.BaseUri);
@@ -84,5 +57,14 @@
         {
             _notifications.ShowNotification(error, Models.NotificationType.Error);
         }
+    }
+
+    public class LoginViewModel()
+    {
+        [Required]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        public string Password { get; set; } = string.Empty;
     }
 }

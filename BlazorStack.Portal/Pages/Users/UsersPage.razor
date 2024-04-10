@@ -86,11 +86,15 @@
     private bool showDeleteModal = false;
     private List<string> roles = new List<string>();
     private UserViewModel? UserToDelete;
-    private List<UserViewModel>? Users = new List<UserViewModel>(); // Populate this list with your users
+    private List<UserViewModel>? Users = new List<UserViewModel>();
     private List<UserViewModel>? FilteredUsers => Users?.Where(u => MatchOnNameOrEmail(u) && MatchOnRoleIfSelected(u)).ToList();
 
-    private string SearchQuery = string.Empty;
-    private string RoleFilter = string.Empty;
+
+    [SupplyParameterFromQuery(Name = "search")]
+    public string? SearchQuery { get; set; } = string.Empty;
+
+    [SupplyParameterFromQuery(Name = "role")]
+    public string? RoleFilter { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -98,7 +102,7 @@
         await RefreshRoles();
     }
 
-    private bool MatchOnNameOrEmail(UserViewModel user) => user.FirstName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+    private bool MatchOnNameOrEmail(UserViewModel user) => string.IsNullOrEmpty(SearchQuery) ? true : user.FirstName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                                                            user.LastName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                                                            user.Email.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase);
 

@@ -87,10 +87,7 @@
     private List<string> roles = new List<string>();
     private UserViewModel? UserToDelete;
     private List<UserViewModel>? Users = new List<UserViewModel>(); // Populate this list with your users
-    private List<UserViewModel>? FilteredUsers => Users?.Where(u => (u.FirstName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                                                         u.LastName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                                                         u.Email.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)) &&
-                                                         (string.IsNullOrEmpty(RoleFilter) ? true : (u.Role.Equals(RoleFilter, StringComparison.OrdinalIgnoreCase) || ((RoleFilter.Equals("No Role", StringComparison.OrdinalIgnoreCase) && string.IsNullOrEmpty(u.Role)))))).ToList();
+    private List<UserViewModel>? FilteredUsers => Users?.Where(u => MatchOnNameOrEmail(u) && MatchOnRoleIfSelected(u)).ToList();
 
     private string SearchQuery = string.Empty;
     private string RoleFilter = string.Empty;
@@ -100,6 +97,12 @@
         await RefreshUsers();
         await RefreshRoles();
     }
+
+    private bool MatchOnNameOrEmail(UserViewModel user) => user.FirstName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                                                           user.LastName.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                                                           user.Email.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase);
+
+    private bool MatchOnRoleIfSelected(UserViewModel u) => string.IsNullOrEmpty(RoleFilter) ? true : u.Role.Equals(RoleFilter, StringComparison.OrdinalIgnoreCase) || (RoleFilter.Equals("No Role", StringComparison.OrdinalIgnoreCase) && string.IsNullOrEmpty(u.Role));
 
     private async Task RefreshUsers()
     {

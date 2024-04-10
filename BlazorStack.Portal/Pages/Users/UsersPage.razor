@@ -16,7 +16,7 @@
     <h3>Users</h3>
 
     <div class="filter-row">
-        <!-- Add filter elements here -->
+        <div class="filters">
         <input class="rounded" type="text" placeholder="Search users..." @oninput="OnSearchChanged" />
         <select @onchange="OnRoleFilterChange" class="custom-dropdown">
             <option value="">Filter by Role</option>
@@ -26,7 +26,10 @@
                 <option value="@role">@role</option>
             }
         </select>
-        <button class="green" @onclick="ToggleModal"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <div class="page-actions">
+            <button class="green" @onclick="ToggleModal"><i class="fa-solid fa-plus"></i></button>
+        </div>
     </div>
 
     <div class="users-list">

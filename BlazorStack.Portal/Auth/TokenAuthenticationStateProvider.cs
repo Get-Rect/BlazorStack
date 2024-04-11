@@ -2,6 +2,7 @@
 using BlazorStack.Portal.Services;
 using BlazorStack.Services;
 using BlazorStack.Services.Extensions;
+using BlazorStack.Services.Models;
 using BlazorStack.Services.Models.ViewModels;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Data;
@@ -45,43 +46,30 @@ namespace BlazorStack.Portal.Auth
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var userInfoResponse = await _api.GetUserInfo();
+            // Set basic claims
+            var userInfoResponse = await _api.GetUserAdditionalInfo();
             if (!userInfoResponse?.IsSuccess == true || userInfoResponse is null || userInfoResponse.Data is null) return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             var userInfo = userInfoResponse.Data;
-
             var claims = new List<Claim>
-                    {
-                        new(ClaimTypes.Name, userInfo.Email),
-                        new(ClaimTypes.Email, userInfo.Email)
-                    };
-
-            claims.AddRange(
-                userInfo.Claims.Where(c => c.Key != ClaimTypes.Name && c.Key != ClaimTypes.Email)
-                    .Select(c => new Claim(c.Key, c.Value)));
-
-            var rolesResponse = await _api.GetRoles();
-            if(!rolesResponse?.IsSuccess == true || rolesResponse is null) return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-            var roles = rolesResponse?.Data;
-
-            if (roles?.Count > 0)
             {
-                foreach (var role in roles)
-                {
-                    if (!string.IsNullOrEmpty(role.Type) && !string.IsNullOrEmpty(role.Value))
-                    {
-                        claims.Add(new Claim(role.Type, role.Value, role.ValueType, role.Issuer, role.OriginalIssuer));
-                    }
-                }
+                    new(ClaimTypes.Name, userInfo.Email),
+                    new(ClaimTypes.Email, userInfo.Email)
+            };
+
+            // Set custom ApplicationUser property
+            if (!string.IsNullOrEmpty(userInfo.PhotoUrl)) claims.Add(new Claim("photo-url", userInfo.PhotoUrl.AddTimestampQueryString() ?? string.Empty));
+
+            // Set role
+            var roleClaim = userInfo.RoleClaim;
+            if (!string.IsNullOrEmpty(roleClaim?.Type) && !string.IsNullOrEmpty(roleClaim?.Value))
+            {
+                claims.Add(new Claim(roleClaim.Type, roleClaim.Value, roleClaim.ValueType, roleClaim.Issuer, roleClaim.OriginalIssuer));
             }
 
-            var additionalInfo = await _api.GetUserAdditionalInfo();
-            if (additionalInfo != null && !string.IsNullOrEmpty(additionalInfo?.Data?.PhotoUrl))
-            {
-                claims.Add(new Claim("photo-url", additionalInfo?.Data?.PhotoUrl.AddTimestampQueryString() ?? string.Empty));
-            }
-            var id = new ClaimsIdentity(claims, nameof(TokenAuthenticationStateProvider));
-            var user = new AuthenticationState(new ClaimsPrincipal(id));
-            return user;
+            // build and return new identity principal
+            var identity = new ClaimsIdentity(claims, nameof(TokenAuthenticationStateProvider));
+            var state = new AuthenticationState(new ClaimsPrincipal(identity));
+            return state;
         }
 
         public async Task<List<string>> Register(string email, string password)
@@ -89,11 +77,5 @@ namespace BlazorStack.Portal.Auth
             var response = await _api.CreateUser(new UserViewModel() { Email = email, Password = password });
             return response?.Errors ?? new List<string>();
         }
-
-        //public async Task<AuthenticationState> CheckAuthenticatedAsync()
-        //{
-        //    var state = await GetAuthenticationStateAsync();
-        //    return state;
-        //}
     }
 }

@@ -90,7 +90,7 @@
     private List<string> roles = new List<string>();
     private UserViewModel? UserToDelete;
     private List<UserViewModel>? Users = new List<UserViewModel>();
-    private List<UserViewModel>? FilteredUsers => Users?.Where(u => MatchOnNameOrEmail(u) && MatchOnRoleIfSelected(u)).ToList();
+    private List<UserViewModel>? FilteredUsers => Users?.Where(u => MatchOnNameOrEmail(u) && MatchOnRoleIfSelected(u)).OrderByDescending(x => x.Role).ThenBy(x => x.Email).ToList();
 
 
     [SupplyParameterFromQuery(Name = "search")]

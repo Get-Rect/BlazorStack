@@ -18,31 +18,21 @@ namespace BlazorStack.Services
 
         public async Task<ApplicationResponse<LoginResponse>?> Login(string email, string password)
         {
-            var result = await _http.PostAsJsonAsync(
-                "login?useCookies=false", new
-                {
-                    email,
-                    password
-                });
-            var response = await result.Content.ReadFromJsonAsync<ApplicationResponse<LoginResponse>>();
-            return response;
-        }
-
-        public async Task<ApplicationResponse<LoginResponse>?> RefreshToken(string refreshToken)
-        {
-            var result = await _http.PostAsJsonAsync(
-                "refresh", new
-                {
-                    refreshToken
-                });
-            var response = await result.Content.ReadFromJsonAsync<ApplicationResponse<LoginResponse>>();
-            return response;
-        }
-
-        public async Task<bool> Logout()
-        {
-            var result = await _http.PostAsJsonAsync("account/logout", new { });
-            return result.IsSuccessStatusCode;
+            try
+            {
+                var response = await _http.PostAsJsonAsync(
+                        "login?useCookies=false", new
+                        {
+                            email,
+                            password
+                        });
+                var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<LoginResponse>>();
+                return content;
+            }
+            catch (HttpRequestException ex)
+            {
+                return new ApplicationResponse<LoginResponse>(ex);
+            }
         }
 
         public async Task<ApplicationResponse<List<string>>?> GetAllRoles()
@@ -61,34 +51,43 @@ namespace BlazorStack.Services
 
         public async Task<ApplicationResponse<bool?>?> CreateUser(UserViewModel newUser)
         {
-            var response = await _http.PostAsJsonAsync("users", newUser);
-            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
-            return content;
+            try
+            {
+                var response = await _http.PostAsJsonAsync("users", newUser);
+                var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
+                return content;
+            }
+            catch (HttpRequestException ex)
+            {
+                return new ApplicationResponse<bool?>(ex);
+            }
         }
 
         public async Task<ApplicationResponse<UserInfo>?> GetUserInfo()
         {
             try
             {
-                var result = await _http.GetAsync("manage/info");
-                return await result.Content.ReadFromJsonAsync<ApplicationResponse<UserInfo>>();
+                var response = await _http.GetAsync("manage/info");
+                var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<UserInfo>>();
+                return content;
             }
-            catch (Exception)
+            catch (HttpRequestException ex)
             {
-                return null;
+                return new ApplicationResponse<UserInfo>(ex);
             }
         }
 
-        public async Task<ApplicationResponse<ApplicationUser>?> GetUserAdditionalInfo()
+        public async Task<ApplicationResponse<UserInfo>?> GetUserAdditionalInfo()
         {
             try
             {
-                var result = await _http.GetAsync("account/me");
-                return await result.Content.ReadFromJsonAsync<ApplicationResponse<ApplicationUser>>();
+                var response = await _http.GetAsync("account/me");
+                var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<UserInfo>>();
+                return content;
             }
-            catch (Exception)
+            catch (HttpRequestException ex)
             {
-                return null;
+                return new ApplicationResponse<UserInfo>(ex);
             }
         }
 
@@ -96,8 +95,9 @@ namespace BlazorStack.Services
         {
             try
             {
-                var result = await _http.GetAsync("account/roles");
-                return await result.Content.ReadFromJsonAsync<ApplicationResponse<List<RoleClaim>>>();
+                var response = await _http.GetAsync("account/roles");
+                var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<List<RoleClaim>>>();
+                return content;
             }
             catch (HttpRequestException ex)
             {
@@ -109,8 +109,9 @@ namespace BlazorStack.Services
         {
             try
             {
-                var result = await _http.GetAsync("users");
-                return await result.Content.ReadFromJsonAsync<ApplicationResponse<List<UserViewModel>>?>();
+                var response = await _http.GetAsync("users");
+                var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<List<UserViewModel>>?>();
+                return content;
             }
             catch (HttpRequestException ex)
             {
@@ -120,37 +121,72 @@ namespace BlazorStack.Services
 
         public async Task<ApplicationResponse<UserDetailsViewModel>?> GetUser(string id)
         {
-            var response = await _http.GetAsync($"users/{id}");
-            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<UserDetailsViewModel>?>();
-            return content;
+            try
+            {
+                var response = await _http.GetAsync($"users/{id}");
+                var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<UserDetailsViewModel>?>();
+                return content;
+            }
+            catch (HttpRequestException ex)
+            {
+                return new ApplicationResponse<UserDetailsViewModel>(ex);
+            }
         }
 
         public async Task<ApplicationResponse<bool?>?> ChangePassword(string id, string newPassword)
         {
-            var response = await _http.PostAsJsonAsync($"users/change-password/{id}", new ChangePasswordRequest { newPassword = newPassword });
-            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
-            return content;
+            try
+            {
+                var response = await _http.PostAsJsonAsync($"users/change-password/{id}", new ChangePasswordRequest { newPassword = newPassword });
+                var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
+                return content;
+            }
+            catch (HttpRequestException ex)
+            {
+                return new ApplicationResponse<bool?>(ex);
+            }
         }
 
         public async Task<ApplicationResponse<bool?>?> UpdateRole(string id, string newRole)
         {
-            var response = await _http.PostAsJsonAsync($"users/update-role/{id}", new UpdateRoleRequest { NewRole = newRole });
-            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
-            return content;
+            try
+            {
+                var response = await _http.PostAsJsonAsync($"users/update-role/{id}", new UpdateRoleRequest { NewRole = newRole });
+                var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
+                return content;
+            }
+            catch (HttpRequestException ex)
+            {
+                return new ApplicationResponse<bool?>(ex);
+            }
         }
 
         public async Task<ApplicationResponse<bool?>?> DeleteUser(string id)
         {
-            var response = await _http.DeleteAsync($"users/{id}");
-            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
-            return content;
+            try
+            {
+                var response = await _http.DeleteAsync($"users/{id}");
+                var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<bool?>>();
+                return content;
+            }
+            catch (HttpRequestException ex)
+            {
+                return new ApplicationResponse<bool?>(ex);
+            }
         }
 
         public async Task<ApplicationResponse<PhotoUploadResponse>?> UploadProfilePhoto(string userId, string base64)
         {
-            var response = await _http.PostAsJsonAsync($"users/{userId}/upload-profile-photo", new UploadRequest { Base64 = base64 });
-            var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<PhotoUploadResponse>>();
-            return content;
+            try
+            {
+                var response = await _http.PostAsJsonAsync($"users/{userId}/upload-profile-photo", new UploadRequest { Base64 = base64 });
+                var content = await response.Content.ReadFromJsonAsync<ApplicationResponse<PhotoUploadResponse>>();
+                return content;
+            }
+            catch (HttpRequestException ex)
+            {
+                return new ApplicationResponse<PhotoUploadResponse>(ex);
+            }
         }
     }
 }

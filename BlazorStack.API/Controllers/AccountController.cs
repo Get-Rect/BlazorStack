@@ -19,42 +19,43 @@ namespace BlazorStack.API.Controllers
             _users = users;
         }
 
-        [HttpGet("roles", Name = "Get Roles")]
-        [Authorize]
-        public async Task<IActionResult> GetRoles()
+        [HttpGet("me", Name = "Get Loggedin User Info")]
+        public async Task<IActionResult> GetMe()
         {
             if (HttpContext.User.Identity is not null && HttpContext.User.Identity.IsAuthenticated)
             {
                 var identity = (ClaimsIdentity)HttpContext.User.Identity;
-                var roles = identity.FindAll(identity.RoleClaimType)
+                var role = identity.FindAll(identity.RoleClaimType)
                     .Select(c =>
-                        new
+                        new RoleClaim
                         {
-                            c.Issuer,
-                            c.OriginalIssuer,
-                            c.Type,
-                            c.Value,
-                            c.ValueType
-                        });
+                            Issuer = c.Issuer,
+                            OriginalIssuer = c.OriginalIssuer,
+                            Type = c.Type,
+                            Value = c.Value,
+                            ValueType = c.ValueType
+                        }).FirstOrDefault();
 
-                return Ok(roles);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+                var user = await _users.FindByIdAsync(userId);
+                if (user == null) return Unauthorized();
+
+                var userInfo = new UserInfo()
+                {
+                    Email = user.Email ?? string.Empty,
+                    PhotoUrl = user.PhotoUrl ?? string.Empty,
+                    RoleClaim = role
+                };
+
+                return Ok(userInfo);
             }
             else
             {
                 return Unauthorized();
             }
-        }
-
-        [HttpGet("me", Name = "Get Loggedin User Info")]
-        public async Task<IActionResult> GetMe()
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId)) return Unauthorized();
-
-            var user = await _users.FindByIdAsync(userId);
-            if (user == null) return Unauthorized();
-
-            return Ok(user);
+            
         }
     }
 }

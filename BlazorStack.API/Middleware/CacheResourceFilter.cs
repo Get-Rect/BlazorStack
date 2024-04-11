@@ -34,7 +34,7 @@ public class CacheResourceFilter : IResourceFilter
             var path = context.HttpContext.Request.Path.ToString().GetBasePath();
             
             // create a cache entry to hold the unique uri's we have cache entries for based on controller name
-            // for example, '/users?search="test"' and all its variations will get added to a list of strings cached with the key "users"
+            // for example, 'https://host/users?search=test' and all its variations will get added to a list of strings cached with the key "users"
             var cacheValue = _cache.GetOrCreate(path, entry =>
             {
                 entry.Value = new List<string>();
